@@ -29,7 +29,7 @@ Single-project CLI. Source in `src/`, tests co-located in `src/__tests__/` (per 
 
 **Purpose**: Confirm a clean starting point before any change.
 
-- [ ] T001 Establish a green baseline: run `npm install`, then `npm run build` (must be clean under `strict`) and `npm test` (existing `src/__tests__/smoke.test.ts` green), to confirm the toolchain and current behavior before changes.
+- [x] T001 Establish a green baseline: run `npm install`, then `npm run build` (must be clean under `strict`) and `npm test` (existing `src/__tests__/smoke.test.ts` green), to confirm the toolchain and current behavior before changes.
 
 ---
 
@@ -39,7 +39,7 @@ Single-project CLI. Source in `src/`, tests co-located in `src/__tests__/` (per 
 
 **⚠️ CRITICAL**: No user-story test work begins until this is complete.
 
-- [ ] T002 [P] Create shared test helpers in `src/__tests__/helpers.ts`: `makeTempWorkspace()` (creates a unique dir via `fs.mkdtemp` under `os.tmpdir()` and registers cleanup), `stripAnsi(s)` (removes chalk ANSI codes), and `captureConsole()` (spies on `console.log`/`console.error`, returns recorded lines, restores on teardown).
+- [x] T002 [P] Create shared test helpers in `src/__tests__/helpers.ts`: `makeTempWorkspace()` (creates a unique dir via `fs.mkdtemp` under `os.tmpdir()` and registers cleanup), `stripAnsi(s)` (removes chalk ANSI codes), and `captureConsole()` (spies on `console.log`/`console.error`, returns recorded lines, restores on teardown).
 
 **Checkpoint**: Test helpers available — user stories can proceed.
 
@@ -55,15 +55,15 @@ Single-project CLI. Source in `src/`, tests co-located in `src/__tests__/` (per 
 
 > **Write these FIRST. They characterize existing behavior; any failure marks a real gap to close in implementation.**
 
-- [ ] T003 [P] [US1] In `src/__tests__/scaffold.test.ts`, test that `runInit(['<tmp>/ws'])` creates the full directory tree and writes all 10 manifest files from `workspaceFiles()` to disk (FR-005).
-- [ ] T004 [US1] In `src/__tests__/scaffold.test.ts`, test that every written file is non-empty on disk, and that stdout (ANSI-stripped) prints — in order — the `Scaffolding workspace at <path> …` line, one `  + <file>` line per manifest entry, the `✓ Your codojo is ready.` line, and the `cd … && run claude` instruction (FR-006, FR-009).
-- [ ] T005 [P] [US1] In `src/__tests__/templates.test.ts`, test `settingsJson()` parses as JSON and denies `notes/**` & `projects/**`, allows `mentor_notes/**`, `profile.md`, `goals.md`, and denies sensitive/traversal paths (`../**`, `~/.ssh/**`, `**/.env`) (FR-007).
-- [ ] T006 [US1] In `src/__tests__/templates.test.ts`, test that `rootClaudeMd()` instructs the mentor to confirm before editing `profile.md`/`goals.md` (FR-007 behavioral half) and that `profileMd()` front matter contains `onboarded: false` (FR-008).
+- [x] T003 [P] [US1] In `src/__tests__/scaffold.test.ts`, test that `runInit(['<tmp>/ws'])` creates the full directory tree and writes all 10 manifest files from `workspaceFiles()` to disk (FR-005).
+- [x] T004 [US1] In `src/__tests__/scaffold.test.ts`, test that every written file is non-empty on disk, and that stdout (ANSI-stripped) prints — in order — the `Scaffolding workspace at <path> …` line, one `  + <file>` line per manifest entry, the `✓ Your codojo is ready.` line, and the `cd … && run claude` instruction (FR-006, FR-009).
+- [x] T005 [P] [US1] In `src/__tests__/templates.test.ts`, test `settingsJson()` parses as JSON and denies `notes/**` & `projects/**`, allows `mentor_notes/**`, `profile.md`, `goals.md`, and denies sensitive/traversal paths (`../**`, `~/.ssh/**`, `**/.env`) (FR-007).
+- [x] T006 [US1] In `src/__tests__/templates.test.ts`, test that `rootClaudeMd()` instructs the mentor to confirm before editing `profile.md`/`goals.md` (FR-007 behavioral half) and that `profileMd()` front matter contains `onboarded: false` (FR-008).
 
 ### Implementation for User Story 1
 
-- [ ] T007 [US1] In `src/commands/init.ts`, ensure `runInit` writes the complete manifest tree to the resolved path and emits the ordered success output; close any gap surfaced by T003/T004.
-- [ ] T008 [P] [US1] In `src/templates/claude.ts`, ensure `rootClaudeMd()` carries the confirm-before-editing instruction for `profile.md`/`goals.md`; add it if T006 fails.
+- [x] T007 [US1] In `src/commands/init.ts`, ensure `runInit` writes the complete manifest tree to the resolved path and emits the ordered success output; close any gap surfaced by T003/T004.
+- [x] T008 [P] [US1] In `src/templates/claude.ts`, ensure `rootClaudeMd()` carries the confirm-before-editing instruction for `profile.md`/`goals.md`; add it if T006 fails.
 
 **Checkpoint**: US1 fully functional — the MVP scaffolds a workspace and reports success. Deployable.
 
@@ -79,14 +79,14 @@ Single-project CLI. Source in `src/`, tests co-located in `src/__tests__/` (per 
 
 > **Write these FIRST. T011 covers the genuine behavior gap (FR-013) and must fail before T012.**
 
-- [ ] T009 [P] [US2] In `src/__tests__/guard.test.ts`, test that `runInit(['<tmp>/ws'])` against a directory containing one regular file aborts, creates no manifest files, leaves the existing file untouched, and sets a non-zero `process.exitCode` (FR-004).
-- [ ] T010 [US2] In `src/__tests__/guard.test.ts`, test that a target directory containing only a hidden file (`.DS_Store`) is treated as non-empty and aborts (FR-004, clarified).
-- [ ] T011 [US2] In `src/__tests__/guard.test.ts`, test that when the target path exists but is a regular file (not a directory), `runInit` prints a clear "path exists and is not a directory" message, writes nothing, and sets a non-zero `process.exitCode` (FR-013).
+- [x] T009 [P] [US2] In `src/__tests__/guard.test.ts`, test that `runInit(['<tmp>/ws'])` against a directory containing one regular file aborts, creates no manifest files, leaves the existing file untouched, and sets a non-zero `process.exitCode` (FR-004).
+- [x] T010 [US2] In `src/__tests__/guard.test.ts`, test that a target directory containing only a hidden file (`.DS_Store`) is treated as non-empty and aborts (FR-004, clarified).
+- [x] T011 [US2] In `src/__tests__/guard.test.ts`, test that when the target path exists but is a regular file (not a directory), `runInit` prints a clear "path exists and is not a directory" message, writes nothing, and sets a non-zero `process.exitCode` (FR-013).
 
 ### Implementation for User Story 2
 
-- [ ] T012 [US2] In `src/commands/init.ts`, before the emptiness guard, add an explicit `fs.stat` check: if the resolved target exists and is **not** a directory, print the FR-013 message to stderr, set a non-zero `process.exitCode`, and return without writing (makes T011 pass). **(This is the main behavior gap.)**
-- [ ] T013 [US2] In `src/commands/init.ts`, confirm the non-empty guard reads entries via `fs.readdir` (so hidden files count) and returns before any write, satisfying T009/T010; adjust the abort message to match FR-004 (not empty → suggest new path / remove dir / mention forthcoming `update`).
+- [x] T012 [US2] In `src/commands/init.ts`, before the emptiness guard, add an explicit `fs.stat` check: if the resolved target exists and is **not** a directory, print the FR-013 message to stderr, set a non-zero `process.exitCode`, and return without writing (makes T011 pass). **(This is the main behavior gap.)**
+- [x] T013 [US2] In `src/commands/init.ts`, confirm the non-empty guard reads entries via `fs.readdir` (so hidden files count) and returns before any write, satisfying T009/T010; adjust the abort message to match FR-004 (not empty → suggest new path / remove dir / mention forthcoming `update`).
 
 **Checkpoint**: US1 + US2 both work — scaffolds fresh targets, protects everything else.
 
@@ -102,15 +102,15 @@ Single-project CLI. Source in `src/`, tests co-located in `src/__tests__/` (per 
 
 > **Write these FIRST. T014 must fail before the helper in T018 exists.**
 
-- [ ] T014 [P] [US3] In `src/__tests__/exit-code.test.ts`, test `exitCodeForError`: returns `130` for an error whose `name === 'ExitPromptError'` and `1` for any other error (FR-011, FR-012).
-- [ ] T015 [P] [US3] In `src/__tests__/invocation.test.ts`, mock `@inquirer/prompts` via `jest.unstable_mockModule` + dynamic `import`, then test that passing a path argument skips the prompt and uses that path, and that with no argument the prompt is invoked with default `~/workspace/codojo` (FR-001, FR-002).
-- [ ] T016 [US3] In `src/__tests__/invocation.test.ts`, test that when the mocked prompt rejects with an `ExitPromptError`, `runInit` creates no workspace files (FR-011, "nothing written on cancellation").
-- [ ] T017 [US3] In `src/__tests__/invocation.test.ts`, test that an uncreatable target (e.g. a path under a read-only parent) surfaces the underlying OS error rather than failing silently, and does not exit 0 (FR-012).
+- [x] T014 [P] [US3] In `src/__tests__/exit-code.test.ts`, test `exitCodeForError`: returns `130` for an error whose `name === 'ExitPromptError'` and `1` for any other error (FR-011, FR-012).
+- [x] T015 [P] [US3] In `src/__tests__/invocation.test.ts`, mock `@inquirer/prompts` via `jest.unstable_mockModule` + dynamic `import`, then test that passing a path argument skips the prompt and uses that path, and that with no argument the prompt is invoked with default `~/workspace/codojo` (FR-001, FR-002).
+- [x] T016 [US3] In `src/__tests__/invocation.test.ts`, test that when the mocked prompt rejects with an `ExitPromptError`, `runInit` creates no workspace files (FR-011, "nothing written on cancellation").
+- [x] T017 [US3] In `src/__tests__/invocation.test.ts`, test that an uncreatable target (e.g. a path under a read-only parent) surfaces the underlying OS error rather than failing silently, and does not exit 0 (FR-012).
 
 ### Implementation for User Story 3
 
-- [ ] T018 [P] [US3] Create `src/exitCode.ts` exporting `exitCodeForError(err: unknown): number` — `130` when `err instanceof Error && err.name === 'ExitPromptError'`, else `1` (makes T014 pass).
-- [ ] T019 [US3] In `src/cli.ts`, replace the inline error→code logic in `main().catch` with `exitCodeForError` imported from `./exitCode.js`, preserving the dim `Cancelled.` message and `process.exit(<code>)` behavior (depends on T018).
+- [x] T018 [P] [US3] Create `src/exitCode.ts` exporting `exitCodeForError(err: unknown): number` — `130` when `err instanceof Error && err.name === 'ExitPromptError'`, else `1` (makes T014 pass).
+- [x] T019 [US3] In `src/cli.ts`, replace the inline error→code logic in `main().catch` with `exitCodeForError` imported from `./exitCode.js`, preserving the dim `Cancelled.` message and `process.exit(<code>)` behavior (depends on T018).
 
 **Checkpoint**: All three user stories independently functional.
 
@@ -120,9 +120,9 @@ Single-project CLI. Source in `src/`, tests co-located in `src/__tests__/` (per 
 
 **Purpose**: Verify cross-cutting guarantees and close the coverage contract.
 
-- [ ] T020 [P] Verify FR-010 by review of `src/commands/init.ts` and `src/templates/*`: no network access, no onboarding interview, and `profileMd()`/`goalsMd()` ship as blank scaffolds (no learner identity written). Capture the finding in the PR description.
-- [ ] T021 Reconcile against `quickstart.md`'s FR/SC → test map, then run `npm run build` (strict, zero errors) and `npm test` (all green) to confirm SC-006 coverage and Principles VI & IX.
-- [ ] T022 [P] Update `README.md` only if init's behavior/wording changed (e.g., the new FR-013 message), keeping docs accurate.
+- [x] T020 [P] FR-010 (testable half): in `src/__tests__/templates.test.ts`, assert `profileMd()` ships with a blank `name:` front-matter field and `_Not yet collected._` placeholders (no baked-in learner identity), and `goalsMd()` ships with no collected goals. The pure "no network access / no onboarding" property stays a **manual code review** of `src/commands/init.ts` and `src/templates/*`, captured in the PR description. (Resolves analyze finding D1.)
+- [x] T021 Reconcile against `quickstart.md`'s FR/SC → test map, then run `npm run build` (strict, zero errors) and `npm test` (all green) to confirm SC-006 coverage and Principles VI & IX.
+- [x] T022 [P] Update `README.md` only if init's behavior/wording changed (e.g., the new FR-013 message), keeping docs accurate.
 
 ---
 
@@ -194,3 +194,4 @@ Task: "T005 templates.test.ts — settings.json permission rules (FR-007)"
 - Keep the toolchain green: `npm run build` strict-clean and `npm test` passing are the merge gates (Principles VI, IX).
 - No new runtime dependencies; ESM only, `.js` import extensions (Principle VII).
 - Commit after each task or logical group; each story checkpoint is a safe stopping point.
+- **FR-003 coverage (analyze finding C1)**: `~`/bare-`~`/relative path resolution is already covered by the existing `src/__tests__/smoke.test.ts` `expandHome` tests — no new task is needed; it is re-verified green by the baseline (T001) and final suite (T021).
