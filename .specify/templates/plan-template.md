@@ -40,7 +40,7 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-Confirm this plan complies with `.specify/memory/constitution.md` (v1.0.1). Mark
+Confirm this plan complies with `.specify/memory/constitution.md` (v1.1.0). Mark
 each gate PASS / FAIL / N/A and justify any FAIL in Complexity Tracking below.
 
 Product behavior (the generated mentor):
@@ -62,6 +62,9 @@ Engineering (the codojo codebase):
 - [ ] **VI. TypeScript Strict Mode** — no `any`/implicit returns/suppressions;
       `tsc` strict build clean.
 - [ ] **VII. ESM Only** — ESM syntax with explicit extensions; no CommonJS.
+- [ ] **IX. Test-Driven Development** — tests written before implementation;
+      every claimed behavior has a test; `npm test` clean; no untested behavior
+      merged.
 - [ ] **Technology Constraints** — stays within the fixed stack (TS strict, ESM,
       Node ≥ 20, @inquirer/prompts, chalk, fs-extra, Jest/ts-jest); new deps
       justified and minimal.

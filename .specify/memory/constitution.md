@@ -1,28 +1,31 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.0.0 → 1.0.1 (PATCH)
-Rationale: Wording-only clarification of Principle VIII's rationale; the
-principle's normative rules are unchanged. Removed the "home directory"
-reference (the workspace lives wherever the learner chose during `codojo init`)
-and reframed the trust argument around the declared sandbox.
+Version change: 1.0.1 → 1.1.0 (MINOR)
+Rationale: Added a new principle (IX. Test-Driven Development), which materially
+expands governance — hence MINOR. TDD is now mandatory for the codojo codebase,
+which reverses the spec-kit templates' default "tests are OPTIONAL" stance.
 
 Modified principles:
-  VIII. The Workspace Is Sacred — rationale reworded (no normative change)
+  Core Principles intro — IX added to the engineering-principle grouping
+  added → IX. Test-Driven Development (NON-NEGOTIABLE)
 
-Added sections: none
+Added sections: none (new principle within Core Principles)
 Removed sections: none
 
 Templates requiring updates:
-  ✅ .specify/templates/plan-template.md — constitution version reference bumped
-                                           to v1.0.1 (gate text unchanged)
+  ✅ .specify/templates/plan-template.md — added Principle IX gate; version
+                                           reference bumped to v1.1.0
+  ✅ .specify/templates/tasks-template.md — reversed "tests OPTIONAL" guidance;
+                                            tests are REQUIRED (TDD) per Principle IX
   ✅ .specify/templates/spec-template.md — reviewed; no change required
-  ✅ .specify/templates/tasks-template.md — reviewed; no change required
   ✅ .specify/templates/checklist-template.md — reviewed; no change required
 
 Follow-up TODOs: none
 
 ----- Prior amendments -----
+1.0.1 (2026-05-25): Clarified Principle VIII rationale (declared sandbox, not a
+fixed home directory); no normative change.
 1.0.0 (2026-05-25): Initial ratification — 8 principles (I–VIII), Technology
 Constraints, Development Workflow & Quality Gates, and Governance; filled from
 the unratified template.
@@ -36,7 +39,7 @@ codojo is two things at once, and these principles govern both: it is a
 **product** — a Claude Code workspace that puts the AI into mentor mode — and it
 is a **codebase** — a TypeScript CLI published to npm. Principles I–III and VIII
 constrain the *product's runtime behavior* (the mentor codojo generates).
-Principles IV–VII constrain *how the codojo codebase itself is engineered*.
+Principles IV–VII and IX constrain *how the codojo codebase itself is engineered*.
 
 ### I. Teach, Don't Ghostwrite
 
@@ -134,6 +137,20 @@ cannot be trusted to run anywhere on a developer's machine. The workspace lives
 wherever the learner chose during `codojo init`, so the boundary is defined by
 that declared sandbox, not by any fixed location.
 
+### IX. Test-Driven Development (NON-NEGOTIABLE)
+
+Tests are written before implementation. Every behavior a feature claims to have
+MUST be covered by a test. If a behavior has no test, it is not considered
+implemented — regardless of whether the code works in practice. The Red-Green-
+Refactor cycle is mandatory: write a failing test, make it pass, clean up.
+`npm test` MUST pass clean before any feature is considered complete. A feature
+with untested behavior MUST NOT be merged to `main`.
+
+**Rationale**: Tests written after the fact verify what was built, not what was
+intended. Tests written first define the contract. codojo teaches good engineering
+and MUST practice it — a codebase with behavioral gaps in its test suite cannot
+be trusted, and cannot serve as an example to learners.
+
 ## Technology Constraints
 
 The following stack is fixed for the codojo codebase; deviating from it requires a
@@ -172,7 +189,8 @@ Quality gates — a change MUST NOT merge to `main` or publish unless:
 - A spec-kit spec backs the feature (Principle IV).
 - `npm run build` passes with zero errors/warnings under strict mode
   (Principle VI).
-- `npm test` passes.
+- `npm test` passes clean, and every behavior the feature claims is covered by a
+  test that was written before its implementation (Principle IX).
 - No CommonJS constructs were introduced (Principle VII).
 - For changes to the generated workspace: the permission boundaries in the
   generated `.claude/settings.json` remain intact (Principle VIII), and mentor
@@ -202,4 +220,4 @@ verify compliance with these principles. Complexity or deviation MUST be
 justified in writing (e.g. the plan's Complexity Tracking table) or the change
 MUST be simplified to comply.
 
-**Version**: 1.0.1 | **Ratified**: 2026-05-25 | **Last Amended**: 2026-05-25
+**Version**: 1.1.0 | **Ratified**: 2026-05-25 | **Last Amended**: 2026-05-25
