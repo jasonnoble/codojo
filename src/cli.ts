@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import chalk from 'chalk';
 import { runInit } from './commands/init.js';
+import { exitCodeForError } from './exitCode.js';
 
 const USAGE = `${chalk.bold('codojo')} — an AI-powered coding dojo for learning new languages
 
@@ -34,11 +35,12 @@ async function main(): Promise<void> {
 }
 
 main().catch((err: unknown) => {
-  // @inquirer throws ExitPromptError when the user hits Ctrl-C at a prompt.
-  if (err instanceof Error && err.name === 'ExitPromptError') {
+  const code = exitCodeForError(err);
+  if (code === 130) {
+    // @inquirer throws ExitPromptError when the user hits Ctrl-C at a prompt.
     console.log(chalk.dim('\nCancelled.'));
-    process.exit(130);
+  } else {
+    console.error(chalk.red(err instanceof Error ? err.message : String(err)));
   }
-  console.error(chalk.red(err instanceof Error ? err.message : String(err)));
-  process.exit(1);
+  process.exit(code);
 });

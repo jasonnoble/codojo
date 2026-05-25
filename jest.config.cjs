@@ -11,6 +11,9 @@
 module.exports = {
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
+  // Only *.test.ts are suites; non-test files in __tests__ (e.g. helpers.ts)
+  // are importable without Jest trying to run them as empty suites.
+  testMatch: ['**/__tests__/**/*.test.ts'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },

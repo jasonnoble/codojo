@@ -35,6 +35,20 @@ export async function runInit(argv: string[] = []): Promise<void> {
 
   const workspace = expandHome(raw);
 
+  if (await fs.pathExists(workspace)) {
+    const stats = await fs.stat(workspace);
+    if (!stats.isDirectory()) {
+      console.error(
+        chalk.red(`\n✗ ${workspace} already exists and is not a directory.`),
+      );
+      console.error(
+        chalk.dim('  Pick a different path for your codojo workspace.'),
+      );
+      process.exitCode = 1;
+      return;
+    }
+  }
+
   if (await isNonEmptyDir(workspace)) {
     console.error(
       chalk.red(`\n✗ ${workspace} already exists and is not empty.`),

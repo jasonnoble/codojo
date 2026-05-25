@@ -65,6 +65,15 @@ for that, enable Claude Code's `sandbox.filesystem`.
 - Node.js >= 20
 - [Claude Code](https://claude.com/claude-code) installed and on your `PATH`
 
+## Contributing
+
+codojo is built with [Spec-Driven Development](https://github.com/github/spec-kit).
+Note that `.claude/` (the spec-kit slash-command skills) is git-ignored, so after
+cloning you'll need to regenerate it locally with `specify init . --integration
+claude --force`. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full setup,
+including an important caveat about not overwriting the committed `.specify/`
+config.
+
 ## License
 
 MIT © 2026 Jason Noble
