@@ -1,0 +1,15 @@
+# Source — only the compiled output in dist/ ships.
+src/
+
+# Build & tooling config
+tsconfig.json
+jest.config.cjs
+.claude/
+
+# Source maps (keep the .d.ts type declarations)
+*.map
+
+# Tests
+**/*.test.js
+**/*.test.d.ts
+**/__tests__/

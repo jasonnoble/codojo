@@ -1,0 +1,63 @@
+{
+  "name": "codojo",
+  "version": "0.1.0",
+  "description": "AI-powered coding dojo for developers learning new languages — concept mapping, guided practice, and quizzing",
+  "keywords": [
+    "ai",
+    "claude",
+    "coding",
+    "dojo",
+    "kata",
+    "learning",
+    "mentor",
+    "education",
+    "cli",
+    "developer-tools",
+    "pair-programming",
+    "tutorial",
+    "language-learning"
+  ],
+  "homepage": "https://github.com/jasonnoble/codojo#readme",
+  "bugs": {
+    "url": "https://github.com/jasonnoble/codojo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonnoble/codojo.git"
+  },
+  "license": "MIT",
+  "author": "Jason Noble <codojo@jasonnoble.dev>",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "codojo": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.19.41",
+    "jest": "^30.4.2",
+    "ts-jest": "^29.4.11",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^8.4.3",
+    "chalk": "^5.6.2",
+    "fs-extra": "^11.3.5"
+  }
+}
