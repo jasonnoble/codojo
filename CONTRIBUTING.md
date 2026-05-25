@@ -54,6 +54,36 @@ npm run dev       # tsc --watch
 Requirements: Node.js >= 20 (see `engines` in `package.json`) and
 [Claude Code](https://claude.com/claude-code) on your `PATH`.
 
+## Reporting bugs
+
+Open a [GitHub issue](https://github.com/jasonnoble/codojo/issues). Include:
+
+- What you ran (exact command and arguments)
+- What you expected to happen
+- What actually happened (output, exit code, error message)
+- Node.js version (`node --version`) and OS
+
+## Proposing a feature
+
+codojo is built with Spec-Driven Development — no feature gets built without a
+spec (Constitution Principle IV). If you have an idea:
+
+1. Open a GitHub issue describing the problem you want to solve (not the
+   solution). We'll discuss it there.
+2. If it gets the go-ahead, run the SDD pipeline:
+   `constitution → specify → clarify → plan → tasks → analyze → implement`
+3. Open a PR with the spec artifacts and implementation together.
+
+Features proposed without a spec will be closed with a pointer back to this
+process — not as a rejection, but to keep the workflow consistent.
+
+## Code of conduct
+
+This project follows the
+[Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/)
+(v2.1). By participating you agree to uphold it. Report unacceptable behavior
+to [codojo@jasonnoble.dev](mailto:codojo@jasonnoble.dev).
+
 ## Before opening a PR
 
 - A spec-kit spec backs the change (Principle IV) — run the SDD flow for any
