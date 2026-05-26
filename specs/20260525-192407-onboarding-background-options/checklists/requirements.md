@@ -32,6 +32,8 @@
 ## Notes
 
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
-- The optional + multi-select behavior of the background step is an informed
-  default documented in Assumptions, not a [NEEDS CLARIFICATION] — a reasonable
-  default exists and it does not change feature scope.
+- PR #3 review (2026-05-26) resolved four open questions into the spec: the
+  sharing options are an explicit multi-select checklist (FR-003/FR-005), the
+  mentor may ask brief clarifying follow-ups (FR-011), the profile data contract
+  drops LinkedIn for a website field (FR-014), and migration of already-onboarded
+  learners is out of scope (FR-016, Assumptions). See the Clarifications section.
