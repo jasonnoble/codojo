@@ -82,3 +82,55 @@ describe('runInit — flexible, interruptible invocation (US3)', () => {
     }
   });
 });
+
+describe('runInit — --allow-gh-cli opt-in flag (US2 / FR-007, FR-008)', () => {
+  let tmp: string;
+  let con: ConsoleCapture;
+
+  beforeEach(async () => {
+    tmp = await makeTempDir();
+    con = captureConsole();
+    process.exitCode = undefined;
+    input.mockReset();
+  });
+
+  afterEach(async () => {
+    con.restore();
+    process.exitCode = undefined;
+    await removeTempDir(tmp);
+  });
+
+  const settingsOf = (ws: string): Promise<string> =>
+    fs.readFile(path.join(ws, '.claude', 'settings.json'), 'utf8');
+
+  it('enables read-only gh when the flag precedes the dir, not treating it as the path (FR-008)', async () => {
+    const ws = path.join(tmp, 'a');
+    await runInit(['--allow-gh-cli', ws]);
+    expect(await fs.pathExists(path.join(ws, 'CLAUDE.md'))).toBe(true);
+    const s = await settingsOf(ws);
+    expect(s).toContain('Bash(gh pr view:*)');
+    expect(s).toContain('"excludedCommands"');
+  });
+
+  it('enables gh when the flag follows the dir (FR-008)', async () => {
+    const ws = path.join(tmp, 'b');
+    await runInit([ws, '--allow-gh-cli']);
+    expect(await settingsOf(ws)).toContain('Bash(gh pr view:*)');
+  });
+
+  it('blocks gh by default when the flag is absent (FR-007)', async () => {
+    const ws = path.join(tmp, 'c');
+    await runInit([ws]);
+    const s = await settingsOf(ws);
+    expect(s).not.toContain('Bash(gh');
+    expect(s).not.toContain('excludedCommands');
+  });
+
+  it('still prompts for the dir when only the flag is given (FR-008)', async () => {
+    const ws = path.join(tmp, 'prompted');
+    input.mockResolvedValueOnce(ws);
+    await runInit(['--allow-gh-cli']);
+    expect(input).toHaveBeenCalledTimes(1);
+    expect(await fs.pathExists(path.join(ws, 'CLAUDE.md'))).toBe(true);
+  });
+});

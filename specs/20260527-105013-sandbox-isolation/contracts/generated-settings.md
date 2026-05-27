@@ -66,7 +66,7 @@ Same as above, with two additions:
 - `sandbox` gains, after `allowUnsandboxedCommands`:
 
 ```json
-"excludedCommands": ["gh", "gh *"]
+"excludedCommands": ["gh *"]
 ```
 
 ## Invariants (assertable)
@@ -76,7 +76,7 @@ Same as above, with two additions:
 3. `sandbox.enabled === true` && `allowUnsandboxedCommands === false`.
 4. `sandbox.filesystem` = `{ allowRead:["."], denyRead:["/"], denyWrite:["."], allowWrite:["./mentor_notes","./profile.md","./goals.md","/tmp"] }`. `denyWrite` is absolute (research R3), so the `allowWrite` entries are inert for shell writes; the mentor writes those files via its Edit/Write tools.
 5. Default: no `Bash(gh` rule; no `sandbox.excludedCommands` key.
-6. gh variant: exactly the 11 read-only rules above (no `gh auth` rule); `excludedCommands === ["gh","gh *"]`. Both entries are retained **pending research R4 sub-test 5**: `"gh *"` (glob) is expected to match `gh <subcommand>` but not bare `gh`, while `"gh"` covers the bare invocation — so both are needed. If the spike proves `"gh"` alone matches subcommands, drop `"gh *"` here and in `data-model.md`.
+6. gh variant: exactly the 11 read-only rules above (no `gh auth` rule); `excludedCommands === ["gh *"]`. (R4 spike, 2026-05-27: `"gh *"` matches both `gh <subcommand>` and bare `gh`, so the previously-paired `"gh"` was redundant and is dropped.)
 7. `notes/`+`projects/` Edit/Write/MultiEdit denied; `mentor_notes/`+`profile.md`+`goals.md` allowed (unchanged).
 
 ## Divergence from the manually-edited `codojo-training` file

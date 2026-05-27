@@ -5,6 +5,7 @@
  */
 import { settingsJson } from './settings.js';
 import { profileMd, goalsMd } from './profile.js';
+import type { WorkspaceOptions } from '../types/index.js';
 import { quizHistoryMd, conceptMapMd } from './mentorNotes.js';
 import {
   rootClaudeMd,
@@ -23,10 +24,12 @@ export interface WorkspaceFile {
 }
 
 /** Every file `init` writes into a fresh workspace. */
-export function workspaceFiles(): WorkspaceFile[] {
+export function workspaceFiles(
+  options: WorkspaceOptions = {},
+): WorkspaceFile[] {
   return [
     { path: 'CLAUDE.md', content: rootClaudeMd() },
-    { path: '.claude/settings.json', content: settingsJson() },
+    { path: '.claude/settings.json', content: settingsJson(options) },
     { path: 'profile.md', content: profileMd() },
     { path: 'goals.md', content: goalsMd() },
     { path: 'notes/CLAUDE.md', content: notesClaudeMd() },

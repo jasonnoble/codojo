@@ -51,6 +51,14 @@ This makes the *only* shell-writable paths the mentor's notes area, profile, goa
 
 **Exit criteria**: if the spike shows a path to unattended arbitrary code execution outside the sandbox that the permission prompt does not catch, the `--allow-gh-cli` exception is redesigned or dropped (FR-010 / US2 revisited). Otherwise, document the confirmed behavior + residual risk and proceed.
 
+**Spike results (2026-05-27 — PASS, no redesign)**:
+1. **Happy path**: `gh status` ran as the real authenticated CLI (exit 0) → `gh` executes outside the sandbox. ✓
+2. **PATH-shim** (`PATH=/tmp/ghshim:$PATH gh`): **prompted** (classifier flagged the `$PATH` expansion) and did not escape (exit 127 / `Operation not permitted`; no `~/SANDBOX_ESCAPED`). PASS.
+3. **Compound** (`gh pr view 1 && cat /etc/hosts`): **prompted**, and after approval the whole line ran outside the sandbox (`cat /etc/hosts` succeeded). PASS by the exit criteria (it prompted, not auto-approved). **Residual risk**: `gh *` matches the *entire* `gh … && …` line, so a gh-led compound runs fully unsandboxed once approved; the `&&` keeps it from matching the read-only allow rules, so it always prompts — the prompt is the only backstop.
+4. **arg0 vs resolved**: `$(which gh) pr list` (absolute path) was **not** matched by `excludedCommands` → ran sandboxed → failed (127). Matching is on the **literal leading token**, not the resolved binary; absolute-path invocations cannot escape.
+
+**Conclusion**: every escape vector is gated by a permission prompt; nothing ran unsandboxed unprompted. Acceptable as an opt-in with the documented compound residual risk. No REDESIGN.
+
 ## R5 — Read-only `gh` allow-list (FR-009)
 
 **Decision**: Closed allow-list of 11 prefix rules (`gh auth` excluded per the Session 2026-05-27 clarification):
@@ -62,11 +70,11 @@ This makes the *only* shell-writable paths the mentor's notes area, profile, goa
 
 ## R6 — gh exception runs outside the sandbox (FR-010 mechanism)
 
-**Decision**: `excludedCommands: ["gh", "gh *"]`, included **only** when `--allow-gh-cli` is set.
+**Decision**: `excludedCommands: ["gh *"]`, included **only** when `--allow-gh-cli` is set.
 
 **Rationale**: `gh` is Go-based and fails TLS verification under Seatbelt (documented), so it cannot complete requests inside the sandbox; the docs prescribe `excludedCommands` for exactly this class (`gh`, `gcloud`, `terraform`). Works under strict mode. When the flag is absent, the key is omitted entirely → `gh` is simply blocked by the sandbox.
 
-**`gh` vs `gh *` redundancy (pending R4 sub-test 5)**: both entries are retained pending verification. Expectation, from the docs' glob-style `"docker *"` example: `"gh *"` requires a trailing token, so it matches `gh <subcommand>` but **not** bare `gh`; `"gh"` covers the bare invocation. **If the spike confirms this → both are needed** (note it in the contract). **If the spike shows `"gh"` alone already matches `gh <subcommand>` → drop `"gh *"`** as redundant from `contracts/generated-settings.md` (Invariant 6) and `data-model.md`. Record the actual result here when the spike runs.
+**`gh` vs `gh *` redundancy (resolved 2026-05-27, R4 sub-test 5)**: `["gh *"]` alone matches **both** `gh <subcommand>` and bare `gh` (Round B allowed both); `["gh"]` matched only the bare word and failed `gh <subcommand>` (Round A). So `"gh"` is **redundant** — the generated config uses `excludedCommands: ["gh *"]` only.
 
 ## R7 — Flag parsing (FR-008)
 

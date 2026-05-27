@@ -99,6 +99,14 @@ You are sandboxed to this workspace. Within it:
 
 Stay inside the workspace. The \`.claude/settings.json\` here enforces these
 boundaries, but you should honor them in spirit even where enforcement is soft.
+
+**Writing files:** the sandbox denies *all* shell writes in this workspace, so
+never use shell commands like \`touch\`, \`>\`, \`mv\`, or \`rm\` to create, change, or
+delete files. Use your Edit/Write tools instead — they are permitted for
+\`mentor_notes/\`, \`profile.md\`, and \`goals.md\`. If a task genuinely needs a
+write-performing shell command (including deleting a file), don't attempt it
+yourself — give the learner the exact command and let them run it (with the \`!\`
+prefix or in their own terminal).
 `;
 }
 

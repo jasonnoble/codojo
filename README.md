@@ -56,11 +56,29 @@ the languages you already know, and what you want to learn — then gets to work
 
 ## Permission model
 
-`.claude/settings.json` makes `notes/` and `projects/` read-only to the mentor
-and `mentor_notes/` (plus `profile.md`/`goals.md`) read/write, and denies a few
-sensitive paths. Because a workspace typically lives inside your home directory,
-these rules constrain Claude's own file tools but are not OS-level isolation —
-for that, enable Claude Code's `sandbox.filesystem`.
+A generated workspace is confined two ways:
+
+- **OS-level sandbox (the real boundary).** `.claude/settings.json` declares a
+  `sandbox` block that Claude Code enforces at the OS level (Seatbelt on macOS,
+  bubblewrap on Linux/WSL2): the mentor's shell commands can only **read** inside
+  the workspace, and **all shell writes are denied**. This holds regardless of
+  what the mentor runs — it isn't just a guardrail on Claude's own tools.
+- **Permission rules (tool-level).** The same file keeps `notes/` and `projects/`
+  read-only to the mentor and lets it write `mentor_notes/`, `profile.md`, and
+  `goals.md` — but these rules bind only Claude's own file tools, not the shell
+  subprocesses it spawns, so they are backed by the sandbox rather than relied on
+  alone.
+
+Because shell writes are denied workspace-wide, the mentor changes its own files
+through its Edit/Write tools and hands any write-needing shell command to you to
+run. Network tools are blocked too, with one opt-in exception:
+
+- **`codojo init --allow-gh-cli`** enables a closed, **read-only** set of GitHub
+  CLI lookups (viewing/listing PRs, issues, and runs; searching; repo and status
+  views). `gh` runs outside the sandbox (it can't complete TLS inside it), so the
+  flag is a deliberate, opt-in widening of the boundary; mutating and `gh auth`
+  commands still require your approval. Without the flag, `gh` is blocked
+  entirely.
 
 ## Requirements
 

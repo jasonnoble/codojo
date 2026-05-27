@@ -52,7 +52,7 @@ Produced by `settingsJson(opts)`. Two variants.
 - `permissions.allow` additionally contains the 11-rule closed read-only set (FR-009, R5):
   `Bash(gh pr view:*)`, `Bash(gh pr list:*)`, `Bash(gh pr diff:*)`, `Bash(gh pr checks:*)`, `Bash(gh issue view:*)`, `Bash(gh issue list:*)`, `Bash(gh repo view:*)`, `Bash(gh run view:*)`, `Bash(gh run list:*)`, `Bash(gh search:*)`, `Bash(gh status:*)`.
   (No `gh auth` rule — clarification.)
-- `sandbox.excludedCommands: ["gh", "gh *"]` (FR-010, R6) — both entries pending the R4 redundancy sub-test (`"gh *"` expected to cover `gh <subcommand>`, `"gh"` the bare invocation; drop one if proven redundant).
+- `sandbox.excludedCommands: ["gh *"]` (FR-010, R6) — `"gh *"` matches both `gh <subcommand>` and bare `gh` (R4 spike, 2026-05-27), so the redundant `"gh"` is dropped.
 
 **Key-order note**: `JSON.stringify(obj, null, 2)` preserves insertion order; declare keys in the emit order shown so output is stable and reviewable.
 
@@ -67,7 +67,7 @@ Produced by `settingsJson(opts)`. Two variants.
 | FR-007 | default `settingsJson()` has no `Bash(gh` allow rule and no `sandbox.excludedCommands`. |
 | FR-008 | `runInit` parses `--allow-gh-cli` before/after dir; flag not treated as dir; absent → default. |
 | FR-009 | `settingsJson({allowGhCli:true})` allow contains all 11 read-only rules and NOT `Bash(gh auth status:*)`. |
-| FR-010 | `settingsJson({allowGhCli:true})` `sandbox.excludedCommands===["gh","gh *"]`. + **manual spike (R4)** for matching semantics. |
+| FR-010 | `settingsJson({allowGhCli:true})` `sandbox.excludedCommands===["gh *"]`. + **manual spike (R4)** for matching semantics (PASS 2026-05-27). |
 | FR-011 | In `src/__tests__/readme.test.ts`: `readFileSync` the repo-root `README.md` and assert it contains `sandbox` and `--allow-gh-cli`, and does NOT describe `Read(../**)`/parent-directory traversal as an isolation mechanism (also covers SC-006). |
 | FR-012 | other `workspaceFiles()` entries (besides settings.json + CLAUDE.md) unchanged. |
 | FR-013 | In `templates.test.ts` (folded with the existing `rootClaudeMd()` tests — no separate `claude.test.ts`): assert `rootClaudeMd()` output contains (a) the instruction to use Edit/Write tools for `mentor_notes/`/`profile.md`/`goals.md`, and (b) the instruction to hand write-needing shell commands to the learner. |

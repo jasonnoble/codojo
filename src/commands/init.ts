@@ -21,11 +21,13 @@ async function isNonEmptyDir(dir: string): Promise<boolean> {
  * later, inside the mentor-mode Claude Code session (driven by the generated
  * `CLAUDE.md`). Aborts if the target workspace already exists and is non-empty.
  *
- * @param argv extra CLI args after the `init` subcommand; the first, if given,
- *             is the workspace directory.
+ * @param argv extra CLI args after the `init` subcommand: the first non-flag arg
+ *             is the workspace directory; `--allow-gh-cli` opts into read-only
+ *             GitHub CLI access (recognized in any position).
  */
 export async function runInit(argv: string[] = []): Promise<void> {
-  const provided = argv[0];
+  const allowGhCli = argv.includes('--allow-gh-cli');
+  const provided = argv.find((arg) => !arg.startsWith('--'));
   const raw =
     provided ??
     (await input({
@@ -65,7 +67,7 @@ export async function runInit(argv: string[] = []): Promise<void> {
 
   console.log(chalk.dim(`\nScaffolding workspace at ${workspace} …`));
 
-  for (const file of workspaceFiles()) {
+  for (const file of workspaceFiles({ allowGhCli })) {
     const dest = path.join(workspace, file.path);
     await fs.ensureDir(path.dirname(dest));
     await fs.writeFile(dest, file.content, 'utf8');
