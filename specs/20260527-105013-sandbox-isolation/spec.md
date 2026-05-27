@@ -72,21 +72,23 @@ A learner reading the project's README "Permission model" section comes away wit
 - An unknown flag (e.g. a typo like `--allow-gh`) does not silently enable GitHub access.
 - The target workspace already exists and is non-empty: existing `init` refusal behavior is unchanged.
 - Default workspace where running a language runtime in the sandbox fails because the runtime's files live outside the workspace: this is an accepted consequence (see Assumptions), not a defect.
+- **`gh` PATH-shim escape** (`--allow-gh-cli` only): the mentor could write a script named `gh` inside the workspace and run it with a prepended `PATH`, matching the `gh` excluded-command pattern and running outside the sandbox. Mitigation relied upon: under strict mode with the closed allow-list, such an invocation is not auto-approved and still hits a permission prompt. The plan MUST confirm this holds.
+- **`gh` compound command** (`--allow-gh-cli` only): for a chained command such as `gh pr view 1 && curl …`, the plan MUST determine whether the entire command runs outside the sandbox and whether the leading `gh` token alone can satisfy an auto-approve rule.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
 - **FR-001**: The generated workspace settings MUST NOT contain the ineffective parent-directory-traversal deny rule (`Read(../**)`).
-- **FR-002**: The generated workspace settings MUST include an OS-level sandbox configuration that confines shell commands (and their child processes) to the workspace, enforced by the operating system rather than by the mentor's discretion.
+- **FR-002**: The generated workspace settings MUST include a *declarative* sandbox configuration that confines shell commands (and their child processes) to the workspace. codojo emits Claude Code's platform-agnostic sandbox settings (allow/deny read and write paths, excluded commands); Claude Code itself translates that single configuration into OS-level enforcement — Seatbelt on macOS, bubblewrap on Linux/WSL2. codojo does NOT author OS-specific sandbox profiles. The boundary is enforced by the operating system, not by the mentor's discretion.
 - **FR-003**: The sandbox MUST be configured so that a shell command blocked by the sandbox is NOT automatically retried outside the sandbox (strict mode).
 - **FR-004**: In a default workspace, shell-command READ access MUST be denied across the entire filesystem except the workspace root.
-- **FR-005**: In a default workspace, shell-command WRITE access MUST be limited to the workspace's designated writable areas (the mentor's notes area, the profile file, and the goals file) plus a temporary scratch location.
+- **FR-005**: In a default workspace, shell-command WRITE access MUST be limited to the workspace's designated writable areas (the mentor's notes area, the profile file, and the goals file) plus the system temporary scratch directory (`/tmp`).
 - **FR-006**: Existing permission boundaries MUST be preserved: the learner's notes and projects areas remain read-only to the mentor; the mentor's notes area, profile, and goals remain writable.
 - **FR-007**: By default (flag absent), the generated workspace MUST block the GitHub CLI (`gh`) entirely.
 - **FR-008**: `codojo init` MUST accept an opt-in `--allow-gh-cli` flag, recognized whether it appears before or after the optional workspace-directory argument, and the flag MUST NOT be interpreted as the directory path.
-- **FR-009**: When `--allow-gh-cli` is provided, the generated workspace MUST permit a defined set of read-only `gh` operations to run unattended: viewing and listing pull requests, viewing pull-request diffs and checks, viewing and listing issues, viewing repositories, viewing and listing workflow runs, searching, and reporting general status. `gh auth` commands MUST NOT be in this auto-approved set (a broad `gh auth status` approval could expose the authentication token via `--show-token`).
-- **FR-010**: When `--allow-gh-cli` is provided, the generated workspace MUST allow `gh` to run outside the sandbox (because the tool cannot complete network requests inside it), while ensuring `gh` operations outside the read-only set — mutating operations (create, merge, close, delete, secrets, generic API calls, login) and any `gh auth` command — are NOT auto-approved and still require explicit user approval.
+- **FR-009**: When `--allow-gh-cli` is provided, the generated workspace MUST permit a defined set of read-only `gh` operations to run unattended: viewing and listing pull requests, viewing pull-request diffs and checks, viewing and listing issues, viewing repositories, viewing and listing workflow runs, searching, and reporting general status. `gh auth` commands MUST NOT be in this auto-approved set (a broad `gh auth status` approval could expose the authentication token via `--show-token`). This set MUST be a *closed* allow-list of specific read-only subcommands (never a `gh *` wildcard), so any unlisted or newly introduced `gh` subcommand is not auto-approved and falls through to a permission prompt — drift can only withhold convenience, never silently grant access. The complete enumerated list is owned by the implementation plan.
+- **FR-010**: When `--allow-gh-cli` is provided, the generated workspace MUST allow `gh` to run outside the sandbox (because the tool cannot complete network requests inside it), while ensuring `gh` operations outside the read-only set — mutating operations (create, merge, close, delete, secrets, generic API calls, login) and any `gh auth` command — are NOT auto-approved and still require explicit user approval. Because this exception is keyed on the command pattern `gh` rather than a verified binary identity, the implementation plan MUST validate how Claude Code matches excluded commands (literal token vs. resolved binary, compound/chained commands, `PATH` resolution) before the exception is relied upon (see Edge Cases). The opt-in nature of `--allow-gh-cli` means the user explicitly accepts this residual widening of the boundary.
 - **FR-011**: The project README's permission-model documentation MUST be updated to describe the sandbox-based isolation accurately and to document the `--allow-gh-cli` flag, and MUST NOT continue to describe the removed parent-traversal rule as a protection.
 - **FR-012**: All other generated workspace files and their contents MUST remain unchanged by this feature.
 
@@ -99,18 +101,20 @@ A learner reading the project's README "Permission model" section comes away wit
 
 ### Measurable Outcomes
 
-- **SC-001**: In a freshly generated default workspace, 100% of mentor shell-command attempts to read files outside the workspace are blocked by the operating system.
-- **SC-002**: In a freshly generated default workspace, 100% of mentor shell-command attempts to create or modify files outside the workspace's designated writable areas are blocked.
+- **SC-001**: `codojo init` deterministically emits a settings file whose sandbox configuration confines reads to the workspace; 100% of generated default workspaces contain the expected read boundary, verified automatically from the generated configuration.
+- **SC-002**: `codojo init` deterministically emits a settings file whose sandbox configuration limits writes to the workspace's designated writable areas plus `/tmp`; 100% of generated default workspaces contain the expected write boundary, verified automatically from the generated configuration.
 - **SC-003**: In a default workspace, the mentor cannot run any `gh` command unattended (0 successful unattended `gh` invocations).
 - **SC-004**: In a `--allow-gh-cli` workspace, every read-only `gh` lookup in the defined set runs without a prompt, and every `gh` operation outside that set — including any `gh auth` command and all mutating operations — requires approval (0 such operations auto-approved).
 - **SC-005**: `--allow-gh-cli` is correctly recognized in both argument positions, with 0% misclassification as the workspace directory.
 - **SC-006**: A reader of the updated README can correctly identify the sandbox as the isolation mechanism and locate the `--allow-gh-cli` flag, with no surviving claim that the parent-traversal deny rule provides isolation.
+- **SC-007**: The OS-level *enforcement* of the emitted configuration (e.g. Seatbelt returning `Operation not permitted` for an out-of-workspace read or write) is a property of Claude Code, not codojo. It is verified manually once on macOS and is explicitly not an ongoing codojo automated-test obligation.
 
 ## Assumptions
 
 - A codojo workspace typically lives inside the user's home directory, so it cannot be isolated by permission deny rules alone (a blanket parent/home deny would also lock the workspace out of itself); OS-level sandboxing is therefore required for a real boundary.
 - The mentor is "notes-only": it guides the learner and hands them commands to run rather than executing language runtimes itself. Consequently, denying shell read access to the whole filesystem outside the workspace — which prevents running runtimes whose files live elsewhere — is an accepted trade-off, not a defect.
-- macOS (Seatbelt) is the primary platform being validated. Linux/WSL2 (bubblewrap) receive the same generated configuration but are not verified as part of this feature.
+- The same declarative sandbox settings are correct across platforms precisely because Claude Code (not codojo) maps them to Seatbelt on macOS and bubblewrap on Linux/WSL2. macOS (Seatbelt) is the primary platform being validated; Linux/WSL2 (bubblewrap) enforcement is not verified as part of this feature. Residual risk: codojo depends on Claude Code's cross-platform sandbox abstraction remaining stable.
 - `gh` is the only tool granted a run-outside-the-sandbox exception, because it is a known case that cannot complete its network handshake inside the sandbox; other such tools are out of scope.
+- The temporary scratch directory is the system `/tmp`. It is ephemeral and OS-managed; codojo neither creates nor cleans it up, and nothing written there is intended to persist across sessions.
 - The user's Claude Code version supports the sandbox configuration the generated settings rely on.
 - The default GitHub-CLI-access setting is "off"; enabling it is always an explicit per-`init` choice.
