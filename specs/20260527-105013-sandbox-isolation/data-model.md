@@ -68,6 +68,6 @@ Produced by `settingsJson(opts)`. Two variants.
 | FR-008 | `runInit` parses `--allow-gh-cli` before/after dir; flag not treated as dir; absent → default. |
 | FR-009 | `settingsJson({allowGhCli:true})` allow contains all 11 read-only rules and NOT `Bash(gh auth status:*)`. |
 | FR-010 | `settingsJson({allowGhCli:true})` `sandbox.excludedCommands===["gh","gh *"]`. + **manual spike (R4)** for matching semantics. |
-| FR-011 | README contains "sandbox", documents `--allow-gh-cli`, no `Read(../**)` claim (assert on README text or manual). |
+| FR-011 | In `src/__tests__/readme.test.ts`: `readFileSync` the repo-root `README.md` and assert it contains `sandbox` and `--allow-gh-cli`, and does NOT describe `Read(../**)`/parent-directory traversal as an isolation mechanism (also covers SC-006). |
 | FR-012 | other `workspaceFiles()` entries (besides settings.json + CLAUDE.md) unchanged. |
 | FR-013 | In `templates.test.ts` (folded with the existing `rootClaudeMd()` tests — no separate `claude.test.ts`): assert `rootClaudeMd()` output contains (a) the instruction to use Edit/Write tools for `mentor_notes/`/`profile.md`/`goals.md`, and (b) the instruction to hand write-needing shell commands to the learner. |

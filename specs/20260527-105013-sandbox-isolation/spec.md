@@ -22,13 +22,13 @@ A learner scaffolds a workspace with `codojo init` and starts the mentor. The me
 
 **Why this priority**: This is the core promise of the feature. Today the workspace advertises an isolation boundary (`Read(../**)`) that does nothing, giving users a false sense of security. Restoring a real boundary is the whole point; everything else is secondary.
 
-**Independent Test**: Generate a default workspace, start the mentor, and ask it to run a shell command that reads a file outside the workspace (e.g. a sibling project) and one that writes a file to the home directory. Both must fail at the OS level (`Operation not permitted`), while reading and writing inside the workspace succeed.
+**Independent Test**: Generate a default workspace, start the mentor, and ask it to run shell commands that (a) read a file outside the workspace (e.g. a sibling project) and (b) write a file anywhere — both must fail at the OS level (`Operation not permitted`). Reading files *inside* the workspace via shell succeeds; the mentor's *writes* to `mentor_notes/`/`profile.md`/`goals.md` happen through its Edit/Write tools, not shell.
 
 **Acceptance Scenarios**:
 
 1. **Given** a freshly generated workspace, **When** the mentor runs a shell command to read a file outside the workspace, **Then** the operating system blocks the read and the command fails.
-2. **Given** a freshly generated workspace, **When** the mentor runs a shell command to write a file outside the workspace's designated writable areas, **Then** the operating system blocks the write and the command fails.
-3. **Given** a freshly generated workspace, **When** the mentor reads or writes within the workspace's allowed areas, **Then** the operation succeeds.
+2. **Given** a freshly generated workspace, **When** the mentor runs a shell command to write a file anywhere (inside or outside the workspace), **Then** the operating system blocks the write and the command fails.
+3. **Given** a freshly generated workspace, **When** the mentor reads a file inside the workspace via shell, or writes `mentor_notes/`/`profile.md`/`goals.md` via its Edit/Write tools, **Then** the operation succeeds.
 4. **Given** a freshly generated workspace, **When** a shell command fails because of the sandbox, **Then** it is not silently retried outside the sandbox.
 
 ---
@@ -84,7 +84,7 @@ A learner reading the project's README "Permission model" section comes away wit
 - **FR-003**: The sandbox MUST be configured so that a shell command blocked by the sandbox is NOT automatically retried outside the sandbox (strict mode).
 - **FR-004**: In a default workspace, shell-command READ access MUST be denied across the entire filesystem except the workspace root.
 - **FR-005**: In a default workspace, shell-command WRITE access MUST be denied throughout the workspace (`denyWrite` on the workspace root; `allowWrite` cannot re-permit paths within a denied region — verified empirically). The mentor changes its writable files (`mentor_notes/`, `profile.md`, `goals.md`) through its Edit/Write tools, which are governed by the permission allow rules (FR-006), NOT through shell commands.
-- **FR-006**: Existing permission boundaries MUST be preserved: the learner's notes and projects areas remain read-only to the mentor; the mentor's notes area, profile, and goals remain writable.
+- **FR-006**: Existing permission boundaries MUST be preserved: the learner's `notes/` and `projects/` areas remain read-only to the mentor; the mentor's notes area (`mentor_notes/`), `profile.md`, and `goals.md` remain writable **via the mentor's Edit/Write tools** (the permission allow rules), not via shell commands (FR-005).
 - **FR-007**: By default (flag absent), the generated workspace MUST block the GitHub CLI (`gh`) entirely.
 - **FR-008**: `codojo init` MUST accept an opt-in `--allow-gh-cli` flag, recognized whether it appears before or after the optional workspace-directory argument, and the flag MUST NOT be interpreted as the directory path.
 - **FR-009**: When `--allow-gh-cli` is provided, the generated workspace MUST permit a defined set of read-only `gh` operations to run unattended: viewing and listing pull requests, viewing pull-request diffs and checks, viewing and listing issues, viewing repositories, viewing and listing workflow runs, searching, and reporting general status. `gh auth` commands MUST NOT be in this auto-approved set (a broad `gh auth status` approval could expose the authentication token via `--show-token`). This set MUST be a *closed* allow-list of specific read-only subcommands (never a `gh *` wildcard), so any unlisted or newly introduced `gh` subcommand is not auto-approved and falls through to a permission prompt — drift can only withhold convenience, never silently grant access. The complete enumerated list is owned by the implementation plan.
@@ -116,6 +116,6 @@ A learner reading the project's README "Permission model" section comes away wit
 - The mentor is "notes-only": it guides the learner and hands them commands to run rather than executing language runtimes itself. Consequently, denying shell read access to the whole filesystem outside the workspace — which prevents running runtimes whose files live elsewhere — is an accepted trade-off, not a defect.
 - The same declarative sandbox settings are correct across platforms precisely because Claude Code (not codojo) maps them to Seatbelt on macOS and bubblewrap on Linux/WSL2. macOS (Seatbelt) is the primary platform being validated; Linux/WSL2 (bubblewrap) enforcement is not verified as part of this feature. Residual risk: codojo depends on Claude Code's cross-platform sandbox abstraction remaining stable.
 - `gh` is the only tool granted a run-outside-the-sandbox exception, because it is a known case that cannot complete its network handshake inside the sandbox; other such tools are out of scope.
-- The temporary scratch directory is the system `/tmp`. It is ephemeral and OS-managed; codojo neither creates nor cleans it up, and nothing written there is intended to persist across sessions.
+- `/tmp` is listed in the sandbox `allowWrite` to document intent, but under the absolute `denyWrite` on the workspace root it is **inert for shell writes** (and macOS `/tmp`→`/private/tmp` symlink resolution would block it regardless). In practice the mentor has **no shell-writable scratch directory** — it writes via its Edit/Write tools and defers write-needing shell commands to the learner (FR-013).
 - The user's Claude Code version supports the sandbox configuration the generated settings rely on.
 - The default GitHub-CLI-access setting is "off"; enabling it is always an explicit per-`init` choice.

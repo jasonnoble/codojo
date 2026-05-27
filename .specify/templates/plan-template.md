@@ -51,8 +51,10 @@ Product behavior (the generated mentor):
       learner's known stack; assumes an experienced developer, not a beginner.
 - [ ] **III. Notes Belong to the Learner** — `notes/`/`projects/` stay read-only;
       `profile.md`/`goals.md` edited only with confirmation.
-- [ ] **VIII. The Workspace Is Sacred** — stays within the workspace; permission
-      boundaries in generated `.claude/settings.json` intact.
+- [ ] **VIII. The Workspace Is Sacred** — stays within the workspace; the generated
+      `.claude/settings.json` declares the boundaries and an OS-level sandbox enforces
+      them for shell commands; no boundary loosened (incl. run-outside-sandbox command
+      exceptions) without deliberate review.
 
 Engineering (the codojo codebase):
 

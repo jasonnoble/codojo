@@ -9,7 +9,7 @@ deny rule with an OS-level Claude Code `sandbox` block, and adds an opt-in
 `--allow-gh-cli` flag (closed read-only `gh` allow-list + `excludedCommands`).
 Stack: TypeScript (strict), ESM, Node ≥ 20, @inquirer/prompts, chalk, fs-extra;
 tests with Jest + ts-jest (ESM). Build: `npm run build` (tsc). Test: `npm test`.
-Governed by `.specify/memory/constitution.md` (v1.1.0) — note Principle IX
+Governed by `.specify/memory/constitution.md` (v1.1.1) — note Principle IX
 (TDD): tests before implementation. Open spike: `excludedCommands` matching
 semantics are undocumented — see plan research R4 before relying on the gh
 exception.
