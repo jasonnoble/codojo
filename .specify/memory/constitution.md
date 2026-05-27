@@ -1,29 +1,37 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.0.1 → 1.1.0 (MINOR)
-Rationale: Added a new principle (IX. Test-Driven Development), which materially
-expands governance — hence MINOR. TDD is now mandatory for the codojo codebase,
-which reverses the spec-kit templates' default "tests are OPTIONAL" stance.
+Version change: 1.1.0 → 1.1.1 (PATCH)
+Rationale: Re-worded Principle VIII to replace the obsolete enumerated mechanism
+"parent-directory traversal denied" (the no-op `Read(../**)` deny rule) with the
+OS-level sandbox boundary the principle's rationale already referenced (since the
+1.0.1 clarification). The principle's intent and normative force are unchanged —
+this corrects a dead implementation detail and adds clarifying language — hence
+PATCH.
 
 Modified principles:
-  Core Principles intro — IX added to the engineering-principle grouping
-  added → IX. Test-Driven Development (NON-NEGOTIABLE)
+  VIII. The Workspace Is Sacred — enumerated boundaries now name the OS-level
+        sandbox instead of "parent-directory traversal denied"; clarified that
+        permission rules govern only the mentor's own tools and MUST be backed by
+        the sandbox, and that a command exception to run outside the sandbox is a
+        deliberate loosening.
 
-Added sections: none (new principle within Core Principles)
+Added sections: none
 Removed sections: none
 
-Templates requiring updates:
-  ✅ .specify/templates/plan-template.md — added Principle IX gate; version
-                                           reference bumped to v1.1.0
-  ✅ .specify/templates/tasks-template.md — reversed "tests OPTIONAL" guidance;
-                                            tests are REQUIRED (TDD) per Principle IX
+Templates / artifacts requiring updates:
+  ✅ .specify/templates/plan-template.md — VIII gate line updated to name the sandbox
+  ✅ CLAUDE.md — constitution version reference bumped to v1.1.1
   ✅ .specify/templates/spec-template.md — reviewed; no change required
+  ✅ .specify/templates/tasks-template.md — reviewed; no change required
   ✅ .specify/templates/checklist-template.md — reviewed; no change required
+  ⚠ README.md — "Permission model" section: propagated by feature FR-011 (task T019)
+  ⚠ generated CLAUDE.md (src/templates/claude.ts) — propagated by feature FR-013 (task T008)
 
 Follow-up TODOs: none
 
 ----- Prior amendments -----
+1.1.0 (2026-05-25): Added Principle IX (Test-Driven Development, NON-NEGOTIABLE).
 1.0.1 (2026-05-25): Clarified Principle VIII rationale (declared sandbox, not a
 fixed home directory); no normative change.
 1.0.0 (2026-05-25): Initial ratification — 8 principles (I–VIII), Technology
@@ -124,18 +132,25 @@ package hazards, and keeps the toolchain — `tsc`, ts-jest, Node ≥ 20 — coh
 ### VIII. The Workspace Is Sacred
 
 The generated mentor MUST stay inside the learner's workspace. It MUST NOT read
-or write files outside that workspace except through the permission boundaries
-declared in the workspace's `.claude/settings.json`. Those boundaries — `notes/`
-and `projects/` read-only, `mentor_notes/` read/write, sensitive paths and
-parent-directory traversal denied — MUST be generated with every workspace and
-honored in spirit even where enforcement is soft. Loosening a boundary MUST be a
+or write files outside that workspace except through the boundaries declared in
+the workspace's `.claude/settings.json`. Those boundaries — generated with every
+workspace — MUST include: `notes/` and `projects/` read-only to the mentor,
+`mentor_notes/`/`profile.md`/`goals.md` writable, sensitive paths denied, and an
+OS-level sandbox confining shell commands and their subprocesses to the
+workspace. The sandbox is the boundary that actually holds: permission rules
+govern only the mentor's own file tools, so they MUST be backed by the sandbox
+rather than relied on alone, and the mentor MUST honor every boundary in spirit
+even where a given layer's enforcement is soft. Loosening a boundary — including
+granting any command an exception to run outside the sandbox — MUST be a
 deliberate, reviewed change, never an incidental one.
 
 **Rationale**: Trust is the foundation of mentorship. A tool that reaches outside
 its declared sandbox — or leaks secrets, or edits the learner's files unbidden —
-cannot be trusted to run anywhere on a developer's machine. The workspace lives
-wherever the learner chose during `codojo init`, so the boundary is defined by
-that declared sandbox, not by any fixed location.
+cannot be trusted to run anywhere on a developer's machine. Permission rules
+constrain the agent's own tools but not the shell subprocesses it spawns; only an
+OS-level sandbox enforces the boundary regardless of what runs. The workspace
+lives wherever the learner chose during `codojo init`, so the boundary is defined
+by that declared sandbox, not by any fixed location.
 
 ### IX. Test-Driven Development (NON-NEGOTIABLE)
 
@@ -220,4 +235,4 @@ verify compliance with these principles. Complexity or deviation MUST be
 justified in writing (e.g. the plan's Complexity Tracking table) or the change
 MUST be simplified to comply.
 
-**Version**: 1.1.0 | **Ratified**: 2026-05-25 | **Last Amended**: 2026-05-25
+**Version**: 1.1.1 | **Ratified**: 2026-05-25 | **Last Amended**: 2026-05-27
