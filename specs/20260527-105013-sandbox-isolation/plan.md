@@ -39,7 +39,7 @@ Product behavior (the generated mentor):
 - [x] **I. Teach, Don't Ghostwrite** — N/A: no change to mentor pedagogy.
 - [x] **II. Meet the Learner Where They Are** — N/A: no change to teaching behavior.
 - [x] **III. Notes Belong to the Learner** — PASS (strengthened): `notes/`/`projects/` Edit/Write deny rules preserved (FR-006). Per research R3, `denyWrite:["."]` denies ALL shell writes in the workspace; the mentor mutates `mentor_notes/`/`profile.md`/`goals.md` via its Edit/Write tools (permission allow rules), and the generated `CLAUDE.md` (FR-013) instructs it to hand write-needing shell commands to the learner.
-- [⚠] **VIII. The Workspace Is Sacred** — PASS in spirit (the feature replaces a no-op with real OS enforcement, strictly strengthening the boundary). **Flag**: VIII's text literally enumerates "parent-directory traversal denied" as a required boundary, which this feature removes as ineffective. See Complexity Tracking — recommend a PATCH constitution amendment to re-word VIII around the sandbox.
+- [x] **VIII. The Workspace Is Sacred** — PASS: the feature replaces a no-op with real OS-level enforcement, strengthening the boundary. The prior wording conflict (VIII enumerated "parent-directory traversal denied") was **resolved by the constitution v1.1.1 amendment** (commit `ac1a2dd`), which re-words VIII around the OS-level sandbox.
 
 Engineering (the codojo codebase):
 
@@ -50,7 +50,7 @@ Engineering (the codojo codebase):
 - [x] **IX. Test-Driven Development** — PASS: Phase-1 tasks order tests before implementation; every FR maps to a test (see quickstart.md / data-model.md test matrix).
 - [x] **Technology Constraints** — PASS: no new dependencies.
 
-**Gate result: PASS** (one flagged governance follow-up on VIII wording; does not block — see Complexity Tracking).
+**Gate result: PASS** (the VIII wording follow-up was resolved by constitution v1.1.1 — commit `ac1a2dd`).
 
 ## Project Structure
 
@@ -84,7 +84,8 @@ src/
 └── __tests__/
     ├── templates.test.ts  # settingsJson() default + {allowGhCli:true}; AND FR-013 rootClaudeMd()
     │                       #   assertions (folded here alongside existing rootClaudeMd tests — no separate claude.test.ts)
-    └── invocation.test.ts # --allow-gh-cli parsing (both positions, no-dir)
+    ├── invocation.test.ts # --allow-gh-cli parsing (both positions, no-dir)
+    └── readme.test.ts     # FR-011 README "Permission model" content assertions
 ```
 
 **Structure Decision**: Single-project CLI; no new directories. Changes thread `WorkspaceOptions` from `cli.ts` → `runInit` → `workspaceFiles` → `settingsJson`.
@@ -93,4 +94,4 @@ src/
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|--------------------------------------|
-| Principle VIII text names "parent-directory traversal denied" as a boundary; this feature removes that rule | The `Read(../**)` rule is a verified no-op; the sandbox enforces the same intent at the OS level far more strongly | Keeping the dead rule to satisfy the literal wording would preserve a false sense of security — the opposite of VIII's intent. Resolution: a separate PATCH amendment re-wording VIII to reference the sandbox boundary (propagated per Governance). Flagged for the user; does not block this plan. |
+| Principle VIII text named "parent-directory traversal denied" as a boundary; this feature removes that rule | The `Read(../**)` rule is a verified no-op; the sandbox enforces the same intent at the OS level far more strongly | Keeping the dead rule to satisfy the literal wording would preserve a false sense of security — the opposite of VIII's intent. **Resolved**: constitution v1.1.1 (commit `ac1a2dd`) re-worded VIII around the sandbox boundary, propagated per Governance. No outstanding deviation. |
