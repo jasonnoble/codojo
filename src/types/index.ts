@@ -42,3 +42,14 @@ export interface WorkspaceConfig {
   /** Free-form learning goals (mirrors `goals.md`). */
   goals: string;
 }
+
+/** Options chosen at `init` time that influence the generated workspace. */
+export interface WorkspaceOptions {
+  /** Opt in to read-only GitHub CLI (`gh`) access for the mentor. Default false. */
+  allowGhCli?: boolean;
+}
+
+/** Default {@link WorkspaceOptions}: every opt-in capability off. */
+export const DEFAULT_WORKSPACE_OPTIONS: Required<WorkspaceOptions> = {
+  allowGhCli: false,
+};

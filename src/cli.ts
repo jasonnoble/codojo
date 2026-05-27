@@ -9,7 +9,9 @@ ${chalk.bold('Usage')}
   codojo <command> [options]
 
 ${chalk.bold('Commands')}
-  init [dir]    Scaffold a new learning workspace (default: ~/workspace/codojo)
+  init [dir] [--allow-gh-cli]
+                Scaffold a new learning workspace (default: ~/workspace/codojo).
+                --allow-gh-cli enables read-only GitHub CLI access for the mentor.
   help          Show this help
 
 After ${chalk.cyan('codojo init')}, change into the workspace and run ${chalk.cyan('claude')} to begin.`;
