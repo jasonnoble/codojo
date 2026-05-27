@@ -1,4 +1,6 @@
-# codojo
+<p align="center">
+  <img src=".github/assets/codojo_logo.png" alt="codojo" width="440">
+</p>
 
 **codojo** is an AI-powered coding dojo — a mentor for developers learning a new
 programming language or framework. Instead of dumping code on you, it teaches
