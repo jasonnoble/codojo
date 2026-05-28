@@ -84,8 +84,8 @@ into the workspace and parsed; a GitHub username leads to analysis of public
 repositories; a website is fetched and read; and "enter something else" lets the
 learner describe their background in free text.
 
-**Why this priority**: Once the menu exists, each path has to actually take a
-useful action to pay off. But the menu and the removal of the broken LinkedIn
+**Why this priority**: Once the checklist exists, each path has to actually take a
+useful action to pay off. But the checklist and the removal of the broken LinkedIn
 step already deliver value, so per-path behavior is the next layer rather than
 the MVP.
 
@@ -96,9 +96,9 @@ method-appropriate action and folds the result into the learner's background.
 **Acceptance Scenarios**:
 
 1. **Given** the learner chooses to share a resume, **When** the mentor responds,
-   **Then** it asks them to paste the resume or copy the file into the workspace
-   (because it cannot read files outside the workspace) and then parses it for
-   background.
+   **Then** it asks them to paste the resume, or — given a path — hands them a
+   `!cp <path> ./resume.<ext>` command to run that copies it into the workspace
+   root, and then parses it for background.
 2. **Given** the learner chooses to provide a GitHub username, **When** they
    supply one, **Then** the mentor analyzes their public repositories to gauge
    their real-world experience.
@@ -147,9 +147,10 @@ appears where appropriate.
 - **Website fetch blocked or paywalled**: The mentor falls back to asking the
   learner to paste the relevant parts (the same fallback the old LinkedIn step
   relied on).
-- **Resume file left outside the workspace**: The mentor explains it can only read
-  inside the workspace and asks the learner to paste the resume or copy the file
-  in.
+- **Resume file left outside the workspace**: The mentor hands the learner a
+  `!cp <path> ./resume.<ext>` command to copy it into the workspace root (the
+  learner runs it, since the mentor cannot write there itself), or asks them to
+  paste the resume — the same fallback for formats the mentor cannot parse.
 - **Private, empty, or low-signal GitHub account**: The mentor notes the limited
   public signal and invites the learner to describe their experience instead.
 - **Learner offers a LinkedIn URL under "enter something else"**: The mentor
@@ -176,9 +177,13 @@ appears where appropriate.
 - **FR-005**: The learner MUST be able to select more than one method in a single
   onboarding (e.g., a resume and a GitHub username), and the system MUST handle
   each selected method.
-- **FR-006**: When the learner shares a resume, the system MUST ask them to paste
-  it or copy the file into the workspace — because the mentor cannot read files
-  outside the workspace — and MUST parse it for background.
+- **FR-006**: When the learner shares a resume, the system MUST let them either
+  paste the resume text or provide its path. For a provided path, the system MUST
+  hand the learner a ready-to-run `!cp <path> ./resume.<ext>` command that copies
+  the file to the workspace root — the learner runs it, because the mentor cannot
+  write into the sandboxed workspace itself — and MUST then read and parse it.
+  Pasting MUST remain available as a fallback for formats the mentor cannot parse
+  (e.g. `.docx`).
 - **FR-007**: When the learner provides a GitHub username, the system MUST analyze
   their public repositories to gauge their real-world experience.
 - **FR-008**: When the learner provides a website, the system MUST fetch and read
@@ -241,7 +246,7 @@ appears where appropriate.
 
 - **Replaces and consolidates**: The new background step replaces the former
   LinkedIn step and folds the previously separate resume and GitHub steps into one
-  menu-driven step. The name, known-languages, learning-target, and goals steps
+  checklist step. The name, known-languages, learning-target, and goals steps
   are otherwise unchanged.
 - **Optional and multi-select**: The sharing methods are a checklist; the learner
   may select more than one or none at all (confirmed in PR #3 review). Gathering
@@ -255,8 +260,11 @@ appears where appropriate.
 - **"Website" is any public URL**: A personal site, portfolio, or blog. The mentor
   reads it the way it would any public page, with the paste-the-relevant-parts
   fallback when a fetch is blocked.
-- **Workspace sandbox is unchanged**: The mentor still cannot read files outside
-  the workspace, so resumes must be pasted or copied in — same as today.
+- **Workspace sandbox is unchanged**: This feature changes no permission or
+  sandbox boundary in the generated `.claude/settings.json`. Resumes are brought
+  into the workspace — pasted, or copied in via a learner-run `!cp` command — so
+  the mentor works only inside it, consistent with how shell writes are delegated
+  to the learner today.
 - **Delivered via bundled workspace content**: This feature changes the onboarding
   instructions and the profile scaffold that the workspace ships with. It
   introduces no new command and no new network capability beyond fetching a
