@@ -67,7 +67,7 @@ stories, 5 success criteria.
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-Confirm this plan complies with `.specify/memory/constitution.md` (v1.1.0).
+Confirm this plan complies with `.specify/memory/constitution.md` (v1.1.1).
 
 Product behavior (the generated mentor):
 
@@ -150,6 +150,16 @@ content and one type; the test surface is `templates.test.ts`, extended with a n
 already exercises `rootClaudeMd()` and `profileMd()`). No production logic in
 `commands/`, `cli.ts`, or `utils.ts` changes — `init` writes whatever the
 templates return, so corrected content flows through unchanged.
+
+## Assumptions
+
+- **`!cp` source-path reachability (FR-006)**: The `!cp <path> ./resume.<ext>`
+  handoff runs in the **learner's own shell, outside the sandbox**, so the
+  learner's shell is assumed to have read access to whatever source path they
+  supply. Paths on network mounts, cloud-synced volumes, or locations requiring
+  elevated permissions may silently fail. This is accepted behavior: codojo does
+  not validate the source path, and a failed `cp` is the learner's signal to fall
+  back to pasting the resume — the paste path exists for exactly this case.
 
 ## Complexity Tracking
 

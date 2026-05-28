@@ -11,6 +11,6 @@ website / something else); edits live in `src/templates/claude.ts`,
 `src/__tests__/templates.test.ts`. Stack: TypeScript (strict), ESM, Node ≥ 20,
 @inquirer/prompts, chalk, fs-extra; tests with Jest + ts-jest (ESM). Build:
 `npm run build` (tsc). Test: `npm test`. Governed by
-`.specify/memory/constitution.md` (v1.1.0) — note Principle IX (TDD): tests
+`.specify/memory/constitution.md` (v1.1.1) — note Principle IX (TDD): tests
 before implementation.
 <!-- SPECKIT END -->

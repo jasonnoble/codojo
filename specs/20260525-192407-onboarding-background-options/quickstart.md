@@ -14,7 +14,7 @@ npm run build     # tsc strict — must be clean (renaming linkedInUrl → websi
 ## TDD order
 
 1. **Red** — add a `describe('onboarding background step', …)` block and extend the
-   profile assertions in `src/__tests__/templates.test.ts` for C1–C14 below; run
+   profile assertions in `src/__tests__/templates.test.ts` for C1–C15 below; run
    `npm test` and watch them fail.
 2. **Green** — edit `src/templates/claude.ts` (onboarding section) and
    `src/templates/profile.ts` (Links + Background note) to pass.
@@ -57,9 +57,25 @@ npm run build     # tsc strict — must be clean (renaming linkedInUrl → websi
 ## Manual review (LLM runtime behavior — not unit-testable)
 
 Per the Principle IX honesty note in plan.md, these are verified by reading the
-generated `CLAUDE.md` and a real onboarding dry-run, not by assertion:
+generated `CLAUDE.md` and a real onboarding dry-run, not by assertion. Each row
+carries a repeatable PASS criterion so the check does not rest on reviewer
+judgment:
 
-- The mentor actually fetches a supplied website / analyzes a supplied GitHub /
-  parses a pasted resume and folds it into the profile (FR-006–008 runtime half).
-- Clarifying follow-ups stay light and the exit is honored (FR-011 runtime half).
-- The mentor confirms `profile.md` contents before writing (Principle III).
+- **Sources folded in (FR-006–008 runtime half)** — the mentor fetches a supplied
+  website / analyzes a supplied GitHub / parses a pasted-or-copied resume and folds
+  it into the profile. **PASS** if, for every source the learner supplied, the
+  resulting `profile.md` Background note carries at least one concrete detail
+  traceable to that source (a named technology, role, or project) and no supplied
+  source is silently dropped.
+- **Recap / confirm after the background step (C8 / FR-010 runtime half)** — the
+  mentor repeats back what it understood before moving on. **PASS** if the recap
+  names at least two of the sources the learner selected (or all of them when fewer
+  than two were given) and introduces no new factual claim about the learner's
+  background that the learner did not provide.
+- **Clarifying follow-ups stay light (C9 / FR-011 runtime half)** — **PASS** if
+  follow-up questions total three or fewer, each is answerable in a single
+  sentence, and the script offers an explicit exit ("or skip this") at least once.
+- **Confirm before writing (Principle III)** — the mentor confirms `profile.md`
+  contents before writing. **PASS** if it shows the proposed `profile.md` (or its
+  substantive changes) and waits for an explicit go-ahead before the Write/Edit,
+  with no write on an ambiguous or absent reply.

@@ -44,14 +44,35 @@ resume / GitHub / website / something else] → (3) Current languages & experien
 (4) Learning target → (5) Goals. The former separate LinkedIn (2), Resume (3), and
 GitHub (4) steps collapse into the single Background step.
 
-**Rationale**: FR-002 fixes Background immediately after Name; FR-015 keeps the
-remaining steps unchanged. Consolidating resume+GitHub (previously their own
-steps) into the Background checklist is exactly the spec's "replaces and
-consolidates" assumption, and matches the user's original request.
+**Rationale**: Two layers — what the spec mandates, and *why that mandate is the
+right call*.
+
+- *Mandated*: FR-002 fixes Background immediately after Name; FR-015 keeps the
+  remaining steps unchanged. Consolidating resume+GitHub (previously their own
+  steps) into the Background checklist is exactly the spec's "replaces and
+  consolidates" assumption, and matches the user's original request.
+- *Why it's preferable*: collecting background early means the mentor enters the
+  Languages and Target steps with real context already in hand. A parsed resume or
+  analyzed GitHub profile surfaces the learner's actual stack and seniority, so the
+  mentor can ground those later questions in specifics ("I see Rails and Go in your
+  history — which do you want to build on?") instead of asking about experience in
+  the abstract. Background is the richest and least-leading signal we gather, so
+  taking it first lets every subsequent step be calibrated rather than cold.
+
+**Counter-argument considered**: Placing Background *after* Target Language — so the
+mentor knows what to look for in a resume or GitHub profile before reading it — was
+weighed and rejected. The mentor reads background sources holistically (full work
+history, all public repos), not filtered to one target, so knowing the target first
+buys little; meanwhile deferring Background would force the Languages and Target
+questions to run blind, the exact abstraction this ordering avoids. Knowing the
+learner's existing stack *before* asking what they want to learn makes for a
+better-informed target conversation, not a worse one (and FR-002 pins Background
+after Name regardless).
 
 **Alternatives considered**: Keeping Background last (dropped — FR-002 pins it
-after Name); keeping resume/GitHub as separate trailing steps (dropped —
-contradicts the consolidation the spec calls for).
+after Name, and it would strand the Languages/Target steps without context);
+keeping resume/GitHub as separate trailing steps (dropped — contradicts the
+consolidation the spec calls for).
 
 ## Decision 4 — Test strategy for instruction-content (Principle IX)
 

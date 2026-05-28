@@ -34,20 +34,21 @@ Learning target → Goals (FR-002, FR-015).
 |---|-------------|-------------|
 | C10 | FR-001 | No request for a LinkedIn profile or URL anywhere in the onboarding script |
 | C11 | FR-008/Edge | No instruction to *fetch* LinkedIn (login-wall); if a learner offers one under "something else", explain it can't be viewed and ask for a paste |
+| C12 | FR-013 (sandbox-isolation) | The mentor MUST NOT use write-performing shell commands (`touch`, `>`, `mv`, `rm`, or any other shell write) to change `profile.md` or any other workspace file during onboarding; it MUST use its Edit/Write tools instead, and hand any genuinely shell-only write to the learner to run. The OS-level sandbox (`denyWrite: ["."]`) enforces this, but the mentor MUST honor it in spirit even where enforcement is soft. |
 
 ## Profile scaffold — `profileMd()`
 
 | # | Requirement | Content |
 |---|-------------|---------|
-| C12 | FR-012 | Links section lists GitHub, Website, Resume — no LinkedIn line |
-| C13 | FR-013 | Background note references resume / GitHub / website / own description — not LinkedIn |
-| C14 | FR-008 (unchanged) | Ships `onboarded: false`, blank identity (existing init tests still pass) |
+| C13 | FR-012 | Links section lists GitHub, Website, Resume — no LinkedIn line |
+| C14 | FR-013 | Background note references resume / GitHub / website / own description — not LinkedIn |
+| C15 | FR-008 (unchanged) | Ships `onboarded: false`, blank identity (existing init tests still pass) |
 
 ## Type contract — `LearnerProfile`
 
 | # | Requirement | Content |
 |---|-------------|---------|
-| C15 | FR-014 | Exposes `websiteUrl?: string`; no `linkedInUrl` field (enforced by strict `tsc`) |
+| C16 | FR-014 | Exposes `websiteUrl?: string`; no `linkedInUrl` field (enforced by strict `tsc`) |
 
 ## Out of scope (asserted by absence)
 
