@@ -24,8 +24,8 @@ export interface LearnerProfile {
   targetLanguage: string;
   /** Free-form description of what success looks like for them. */
   learningGoals: string;
-  /** Optional public LinkedIn profile URL, used as background. */
-  linkedInUrl?: string;
+  /** Optional public website URL (site/portfolio/blog), used as background. */
+  websiteUrl?: string;
   /** Optional path (inside the workspace) to a resume the mentor may read. */
   resumePath?: string;
   /** Optional GitHub username, used to analyze existing repos. */

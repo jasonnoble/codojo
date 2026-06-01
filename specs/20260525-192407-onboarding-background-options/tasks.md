@@ -28,7 +28,7 @@ Single-project CLI (`codojo`). Source at `src/`, tests at `src/__tests__/`. No s
 
 **Purpose**: Establish a clean Red/Green baseline before any edits.
 
-- [ ] T001 Establish baseline: run `npm test` and `npm run build` on the clean tree and confirm both pass, so any new failing assertion is attributable to this feature (TDD Red baseline). No files changed.
+- [X] T001 Establish baseline: run `npm test` and `npm run build` on the clean tree and confirm both pass, so any new failing assertion is attributable to this feature (TDD Red baseline). No files changed.
 
 ---
 
@@ -48,11 +48,11 @@ Single-project CLI (`codojo`). Source at `src/`, tests at `src/__tests__/`. No s
 
 > Write FIRST, confirm they FAIL before implementation.
 
-- [ ] T002 [US1] Add a `describe('onboarding background step', …)` block to `src/__tests__/templates.test.ts` with failing assertions on `rootClaudeMd()`: contains the FR-002 framing ("…know a little about your background…") right after the Name step (C1); presents the four options as a checklist — resume, GitHub username, website, something else (C2/FR-003); states the any/all/none multi-select + optional intent (C3/FR-003/004/005); contains a confirm-back instruction for the background step (C8/FR-010); permits light clarifying follow-ups with an always-available exit (C9/FR-011); does **not** match `/linkedin/i` anywhere in the script (C10/FR-001); still contains the Name, current-languages, learning-target, and goals steps (FR-015); and keeps the `onboarded: false` gate (FR-016). Run `npm test`; confirm the new assertions fail.
+- [X] T002 [US1] Add a `describe('onboarding background step', …)` block to `src/__tests__/templates.test.ts` with failing assertions on `rootClaudeMd()`: contains the FR-002 framing ("…know a little about your background…") right after the Name step (C1); presents the four options as a checklist — resume, GitHub username, website, something else (C2/FR-003); states the any/all/none multi-select + optional intent (C3/FR-003/004/005); contains a confirm-back instruction for the background step (C8/FR-010); permits light clarifying follow-ups with an always-available exit (C9/FR-011); does **not** match `/linkedin/i` anywhere in the script (C10/FR-001); still contains the Name, current-languages, learning-target, and goals steps (FR-015); and keeps the `onboarded: false` gate (FR-016). Run `npm test`; confirm the new assertions fail.
 
 ### Implementation for User Story 1
 
-- [ ] T003 [US1] In `src/templates/claude.ts` (`rootClaudeMd()`), replace onboarding steps 2–4 (LinkedIn, Resume, GitHub) with a single **Background** step at position 2 and renumber the trailing steps (Current languages → 3, Learning target → 4, Goals → 5; research.md Decision 3). The Background step must carry the FR-002 framing, list the four options as a checklist, state the any/all/none + optional intent, instruct a confirm-back before moving on, and allow light follow-ups with an exit. Leave the Name step and the `onboarded: false` gate intact. Make T002's assertions pass. (Per-method action detail is added in US2.)
+- [X] T003 [US1] In `src/templates/claude.ts` (`rootClaudeMd()`), replace onboarding steps 2–4 (LinkedIn, Resume, GitHub) with a single **Background** step at position 2 and renumber the trailing steps (Current languages → 3, Learning target → 4, Goals → 5; research.md Decision 3). The Background step must carry the FR-002 framing, list the four options as a checklist, state the any/all/none + optional intent, instruct a confirm-back before moving on, and allow light follow-ups with an exit. Leave the Name step and the `onboarded: false` gate intact. Make T002's assertions pass. (Per-method action detail is added in US2.)
 
 **Checkpoint**: Onboarding shows the four-option background checklist with the correct framing and no LinkedIn ask — independently demoable as the MVP.
 
@@ -68,11 +68,11 @@ Single-project CLI (`codojo`). Source at `src/`, tests at `src/__tests__/`. No s
 
 > Write FIRST, confirm they FAIL before implementation.
 
-- [ ] T004 [US2] Extend the `onboarding background step` describe block in `src/__tests__/templates.test.ts` with failing assertions on `rootClaudeMd()`: resume → instruct **paste**, or give a path and the mentor hands the learner a ready-to-run `!cp <path> ./resume.<ext>` command (learner runs it) bringing it to the workspace root, then parse; paste is the fallback for unparseable formats (C4/FR-006); GitHub → analyze the username's public repositories (C5/FR-007); website → fetch & read, with a paste fallback if the fetch is blocked (C6/FR-008); something else → invite a free-form description and incorporate it (C7/FR-009); a LinkedIn URL offered under "something else" → explain it can't be viewed and ask for a paste (C11/edge); and the background step explicitly directs the mentor to write `profile.md` via its Edit/Write tools (never a shell write like `touch`/`>`/`mv`) and to hand any shell-only write to the learner to run (C12/FR-017) — assert this directive appears within the background/onboarding step, so a generic shell-write rule elsewhere does not satisfy it. Run `npm test`; confirm fail.
+- [X] T004 [US2] Extend the `onboarding background step` describe block in `src/__tests__/templates.test.ts` with failing assertions on `rootClaudeMd()`: resume → instruct **paste**, or give a path and the mentor hands the learner a ready-to-run `!cp <path> ./resume.<ext>` command (learner runs it) bringing it to the workspace root, then parse; paste is the fallback for unparseable formats (C4/FR-006); GitHub → analyze the username's public repositories (C5/FR-007); website → fetch & read, with a paste fallback if the fetch is blocked (C6/FR-008); something else → invite a free-form description and incorporate it (C7/FR-009); a LinkedIn URL offered under "something else" → explain it can't be viewed and ask for a paste (C11/edge); and the background step explicitly directs the mentor to write `profile.md` via its Edit/Write tools (never a shell write like `touch`/`>`/`mv`) and to hand any shell-only write to the learner to run (C12/FR-017) — assert this directive appears within the background/onboarding step, so a generic shell-write rule elsewhere does not satisfy it. Run `npm test`; confirm fail.
 
 ### Implementation for User Story 2
 
-- [ ] T005 [US2] In `src/templates/claude.ts` (`rootClaudeMd()` Background step from T003), add the per-method instructions and edge handling: resume (paste, or hand the learner `!cp <path> ./resume.<ext>` to run, then parse; paste fallback for `.docx`/unparseable); GitHub username (analyze public repos); website (fetch & read; paste fallback if blocked); something else (free-form, incorporated); LinkedIn-under-"something else" handling; and add (or extend) the background step's directive that `profile.md` writes go through Edit/Write — never a shell write — with any shell-only write handed to the learner, so T004's onboarding-scoped assertion passes (C12/FR-017). Make T004 pass. Same file/function as T003 — runs after it, not in parallel.
+- [X] T005 [US2] In `src/templates/claude.ts` (`rootClaudeMd()` Background step from T003), add the per-method instructions and edge handling: resume (paste, or hand the learner `!cp <path> ./resume.<ext>` to run, then parse; paste fallback for `.docx`/unparseable); GitHub username (analyze public repos); website (fetch & read; paste fallback if blocked); something else (free-form, incorporated); LinkedIn-under-"something else" handling; and add (or extend) the background step's directive that `profile.md` writes go through Edit/Write — never a shell write — with any shell-only write handed to the learner, so T004's onboarding-scoped assertion passes (C12/FR-017). Make T004 pass. Same file/function as T003 — runs after it, not in parallel.
 
 **Checkpoint**: Each background path triggers the correct mentor action; US1 + US2 together complete the onboarding-script behavior.
 
@@ -88,12 +88,12 @@ Single-project CLI (`codojo`). Source at `src/`, tests at `src/__tests__/`. No s
 
 > Write FIRST, confirm they FAIL before implementation. (Shares `templates.test.ts` with US1/US2 — sequential, not parallel.)
 
-- [ ] T006 [US3] Extend the `profileMd()` assertions in `src/__tests__/templates.test.ts`: Links section lists GitHub, Website, Resume and does **not** match `/linkedin/i` (C13/FR-012); the Background note references resume / GitHub / website / the learner's own description and **not** LinkedIn (C14/FR-013); `profileMd()` still ships `onboarded: false` and a blank identity so existing init tests pass (C15). Run `npm test`; confirm the LinkedIn-removal assertions fail.
+- [X] T006 [US3] Extend the `profileMd()` assertions in `src/__tests__/templates.test.ts`: Links section lists GitHub, Website, Resume and does **not** match `/linkedin/i` (C13/FR-012); the Background note references resume / GitHub / website / the learner's own description and **not** LinkedIn (C14/FR-013); `profileMd()` still ships `onboarded: false` and a blank identity so existing init tests pass (C15). Run `npm test`; confirm the LinkedIn-removal assertions fail.
 
 ### Implementation for User Story 3
 
-- [ ] T007 [US3] In `src/templates/profile.ts` (`profileMd()`), change the Links section from `LinkedIn:/GitHub:/Resume:` to `GitHub:/Website:/Resume:` (FR-012) and update the Background-note HTML comment to reference resume / GitHub / website / own description, dropping "LinkedIn profile" (FR-013). Make T006 pass.
-- [ ] T008 [P] [US3] In `src/types/index.ts`, rename `LearnerProfile.linkedInUrl?: string` → `websiteUrl?: string` (FR-014/C16). Verification is `npm run build` (strict `tsc`) staying clean — the field is referenced nowhere else, so the build compiles only once renamed. Different file from T007 with no dependency → parallelizable.
+- [X] T007 [US3] In `src/templates/profile.ts` (`profileMd()`), change the Links section from `LinkedIn:/GitHub:/Resume:` to `GitHub:/Website:/Resume:` (FR-012) and update the Background-note HTML comment to reference resume / GitHub / website / own description, dropping "LinkedIn profile" (FR-013). Make T006 pass.
+- [X] T008 [P] [US3] In `src/types/index.ts`, rename `LearnerProfile.linkedInUrl?: string` → `websiteUrl?: string` (FR-014/C16). Verification is `npm run build` (strict `tsc`) staying clean — the field is referenced nowhere else, so the build compiles only once renamed. Different file from T007 with no dependency → parallelizable.
 
 **Checkpoint**: No LinkedIn reference remains in any shipped artifact (SC-004); the data contract exposes `websiteUrl`.
 
@@ -101,7 +101,7 @@ Single-project CLI (`codojo`). Source at `src/`, tests at `src/__tests__/`. No s
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [ ] T009 Run the full suite gate (SC-005): `npm test` all green and `npm run build` strict-clean, confirming no regressions in existing `init`/template tests.
+- [X] T009 Run the full suite gate (SC-005): `npm test` all green and `npm run build` strict-clean, confirming no regressions in existing `init`/template tests.
 - [ ] T010 Manual review per quickstart.md (LLM runtime behavior — not unit-testable): dry-run onboarding and check each row against its PASS criterion — sources folded into `profile.md` (≥1 concrete detail per supplied source, none dropped); recap names ≥2 selected sources with no invented claims; ≤3 light follow-ups each answerable in a sentence with an explicit exit offered; `profile.md` confirmed before write. Log results. Runs after T009 (needs the built artifact).
 
 ---
