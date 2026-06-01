@@ -27,8 +27,8 @@ _Not yet collected._
 
 ## Background
 
-<!-- Summary drawn from the learner's answers, and (if provided) their LinkedIn
-     profile, resume, and GitHub repositories. -->
+<!-- Summary drawn from the learner's answers, and (if provided) their resume,
+     GitHub repositories, website, and their own description. -->
 
 _Not yet collected._
 
@@ -46,8 +46,8 @@ _Not yet collected._
 
 ## Links
 
-- LinkedIn:
 - GitHub:
+- Website:
 - Resume:
 `;
 }

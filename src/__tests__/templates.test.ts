@@ -135,6 +135,102 @@ describe('rootClaudeMd — confirm-before-edit behavioral rule (FR-007)', () => 
   });
 });
 
+describe('onboarding background step (US1: FR-001..FR-005, FR-010, FR-011, FR-015, FR-016)', () => {
+  const md = rootClaudeMd();
+
+  it('introduces the background step with the FR-002 framing (C1)', () => {
+    expect(md).toMatch(/get\s+the\s+most\s+out\s+of\s+this\s+process/i);
+    expect(md).toMatch(/know\s+a\s+little\s+about\s+your\s+background/i);
+  });
+
+  it('places the Background step immediately after Name (C1/FR-002/FR-015)', () => {
+    const nameIdx = md.indexOf('**Name.**');
+    const bgIdx = md.indexOf('**Background.**');
+    const langIdx = md.search(/current languages/i);
+    expect(nameIdx).toBeGreaterThanOrEqual(0);
+    expect(bgIdx).toBeGreaterThan(nameIdx);
+    expect(langIdx).toBeGreaterThan(bgIdx);
+  });
+
+  it('presents the four sharing options as a checklist (C2/FR-003)', () => {
+    expect(md).toMatch(/checklist/i);
+    expect(md).toMatch(/resume/i);
+    expect(md).toMatch(/github username/i);
+    expect(md).toMatch(/website/i);
+    expect(md).toMatch(/something else/i);
+  });
+
+  it('states the any/all/none multi-select + optional intent (C3/FR-003/004/005)', () => {
+    expect(md).toMatch(/any combination|more than one/i);
+    expect(md).toMatch(/optional|skip|none/i);
+  });
+
+  it('confirms back understanding after each step incl. background (C8/FR-010)', () => {
+    expect(md).toMatch(/repeat back what you understood and confirm/i);
+  });
+
+  it('permits light clarifying follow-ups with an exit (C9/FR-011)', () => {
+    expect(md).toMatch(/clarifying follow-up|follow-up questions/i);
+    expect(md).toMatch(/offer to move on|always offer an exit|move on/i);
+  });
+
+  it('never asks for LinkedIn anywhere in the onboarding script (C10/FR-001)', () => {
+    expect(md).not.toMatch(/linkedin/i);
+  });
+
+  it('keeps the other onboarding steps unchanged (FR-015)', () => {
+    expect(md).toMatch(/current languages/i);
+    expect(md).toMatch(/learning target/i);
+    expect(md).toMatch(/goals/i);
+  });
+
+  it('keeps the onboarded:false gate (FR-016)', () => {
+    expect(md).toContain('onboarded: false');
+  });
+});
+
+describe('onboarding background — per-method behavior (US2: FR-006..FR-009, FR-017, edge)', () => {
+  const md = rootClaudeMd();
+  const bg = md.slice(
+    md.indexOf('**Background.**'),
+    md.indexOf('**Current languages.**'),
+  );
+
+  it('resume: paste, or a learner-run !cp into the workspace, then parse (C4/FR-006)', () => {
+    expect(bg).toMatch(/paste/i);
+    expect(bg).toMatch(/!cp <path> \.\/resume\.<ext>/);
+    expect(bg).toMatch(/parse/i);
+  });
+
+  it('resume: paste is the fallback for unparseable formats like .docx (C4/FR-006)', () => {
+    expect(bg).toMatch(/\.docx/i);
+  });
+
+  it("github: analyze the username's public repositories (C5/FR-007)", () => {
+    expect(bg).toMatch(/public repositor/i);
+  });
+
+  it('website: fetch & read with a paste fallback if blocked (C6/FR-008)', () => {
+    expect(bg).toMatch(/fetch/i);
+    expect(bg).toMatch(/blocked/i);
+  });
+
+  it('something else: invite a free-form description and incorporate it (C7/FR-009)', () => {
+    expect(bg).toMatch(/(your|their) own words|free-form|describe (your|their) background/i);
+  });
+
+  it('handles a login-walled profile link without naming LinkedIn (C11/edge, C10)', () => {
+    expect(bg).toMatch(/login wall|behind a login|requires.*log/i);
+    expect(md).not.toMatch(/linkedin/i);
+  });
+
+  it('directs profile.md writes via Edit/Write within the background step, not shell (C12/FR-017)', () => {
+    expect(bg).toMatch(/Edit\/Write/);
+    expect(bg).toMatch(/never\s+a\s+shell\s+write/i);
+    expect(bg).toMatch(/hand[\s\S]*to the\s+learner/i);
+  });
+});
+
 describe('profileMd / goalsMd — onboarding state and no baked-in identity (FR-008, FR-010)', () => {
   it('ships profile.md as not-yet-onboarded (FR-008)', () => {
     expect(profileMd()).toContain('onboarded: false');
@@ -152,6 +248,30 @@ describe('profileMd / goalsMd — onboarding state and no baked-in identity (FR-
 
   it('ships goals.md with no collected goals', () => {
     expect(goalsMd()).toContain('_Not yet collected.');
+  });
+});
+
+describe('profileMd — LinkedIn removed, website added (US3: FR-012, FR-013, C15)', () => {
+  const md = profileMd();
+
+  it('Links section lists GitHub, Website, Resume and no LinkedIn (C13/FR-012)', () => {
+    expect(md).toMatch(/- GitHub:/);
+    expect(md).toMatch(/- Website:/);
+    expect(md).toMatch(/- Resume:/);
+    expect(md).not.toMatch(/linkedin/i);
+  });
+
+  it('Background note references resume/GitHub/website/own description, not LinkedIn (C14/FR-013)', () => {
+    const note = md.slice(md.indexOf('## Background'), md.indexOf('## Known'));
+    expect(note).toMatch(/resume/i);
+    expect(note).toMatch(/github/i);
+    expect(note).toMatch(/website/i);
+    expect(note).not.toMatch(/linkedin/i);
+  });
+
+  it('still ships onboarded:false and a blank identity (C15)', () => {
+    expect(md).toContain('onboarded: false');
+    expect(md).toMatch(/^name:\s*$/m);
   });
 });
 

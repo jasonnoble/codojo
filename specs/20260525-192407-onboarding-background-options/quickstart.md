@@ -43,6 +43,7 @@ npm run build     # tsc strict — must be clean (renaming linkedInUrl → websi
 | FR-014 | Contract: `websiteUrl`, no `linkedInUrl` | Strict `tsc` build clean after rename |
 | FR-015 | Other steps unchanged | Assert script still contains Name, languages, target, goals steps |
 | FR-016 | No re-interview of onboarded | Assert script keeps the `onboarded: false` gate; `profileMd()` still ships `onboarded: false` |
+| FR-017 | No shell writes during onboarding; delegate to learner | Assert `rootClaudeMd()` directs Edit/Write for workspace writes and hands shell-only writes to the learner |
 
 ## SC → verification
 

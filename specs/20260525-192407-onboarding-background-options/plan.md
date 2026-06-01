@@ -136,7 +136,7 @@ Existing single-project CLI; this feature edits content, not structure:
 ```text
 src/
 ├── templates/
-│   ├── claude.ts          # rootClaudeMd() — onboarding script (FR-001,002,003,004,005,006,007,008,009,010,011,015,016)
+│   ├── claude.ts          # rootClaudeMd() — onboarding script (FR-001,002,003,004,005,006,007,008,009,010,011,015,016,017)
 │   └── profile.ts         # profileMd() — Links section + Background note (FR-012,013)
 ├── types/
 │   └── index.ts           # LearnerProfile — drop linkedInUrl, add websiteUrl (FR-014)

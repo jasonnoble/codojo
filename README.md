@@ -28,15 +28,17 @@ the languages you already know, and what you want to learn — then gets to work
 ### Get to know each other
 ![Get to know each other](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/onboarding-whats-your-name.png)
 
+### Provide 4-5 ways of learning your background
+![Provide 4-5 ways of learning your background](readme_screenshots/onboarding-github-website.png)
+
 ### Parse your resume to learn your background
 ![Parse your resume to learn your background](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/onboarding-resume.png)
-
-### Look at your Github repos
-![Look at your Github repos](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/onboarding-github.png)
 
 ### What do you want to learn or practice?
 ![What do you want to learn or practice?](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/onboarding-learning-goals.png)
 
+### End with a summary and recording to profile.md and goals.md
+![End with a summary and recording to profile.md and goals.md](readme_screenshots/onboarding-summary.png)
 </details>
 
 <details>

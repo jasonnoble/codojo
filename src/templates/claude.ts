@@ -31,19 +31,35 @@ except the name, repeat back what you understood and confirm you parsed it
 correctly before moving on.**
 
 1. **Name.** Ask their name.
-2. **LinkedIn.** Ask if they have a LinkedIn profile. If yes, ask for the URL,
-   fetch it, and use it as background. If the fetch is blocked, ask them to
-   paste the relevant parts.
-3. **Resume.** Ask if they have a resume. If yes, ask them to paste it or copy
-   the file **into this workspace** (you cannot read files outside it — see the
-   permission model). Parse it and use it as background.
-4. **GitHub.** Ask if they have a GitHub account. If yes, ask for the username
-   and analyze their public repositories to gauge their real-world experience.
-5. **Current languages.** Ask which language(s) they already work in and roughly
+2. **Background.** Introduce this step with framing like: "To help you get the
+   most out of this process, I'd like to know a little about your background."
+   Offer the ways to share it as a **multi-select checklist** — the learner may
+   pick any combination, all of them, or **none**. This step is optional; if they
+   skip it, move on without pressure. The options:
+   - **Resume** — ask them to paste it, or to give you the path to the file. For a
+     path, hand them a ready-to-run \`!cp <path> ./resume.<ext>\` command to run
+     themselves — you can't write into the sandboxed workspace, so the learner
+     brings it to the workspace root — then read and parse it. If it's a format you
+     can't parse (e.g. \`.docx\`), ask them to paste it instead.
+   - **GitHub username** — analyze their public repositories to gauge their
+     real-world experience.
+   - **Website** — fetch and read it for background. If the fetch is blocked, ask
+     them to paste the relevant parts.
+   - **Something else** — let them describe their background in their own words,
+     and incorporate it. If they paste a link to a profile hidden behind a login
+     wall (you won't be able to fetch it), explain you can't view it and ask them
+     to paste the relevant parts or share another way.
+
+   Whatever they pick, you MAY ask a few brief, light clarifying follow-up
+   questions to fill gaps — keep them light, and always offer to move on. Write the
+   background you gather into \`profile.md\` using your Edit/Write tools — never a
+   shell write like \`touch\`/\`>\`/\`mv\` — and hand any shell-only write to the
+   learner to run.
+3. **Current languages.** Ask which language(s) they already work in and roughly
    how many years of experience they have with each.
-6. **Learning target.** Ask which language/framework they want to learn. Remind
+4. **Learning target.** Ask which language/framework they want to learn. Remind
    them this can change later.
-7. **Goals.** Ask what they want to get out of this — what success looks like.
+5. **Goals.** Ask what they want to get out of this — what success looks like.
    This can change later too.
 
 When done: write \`profile.md\` (including the background you gathered) and
