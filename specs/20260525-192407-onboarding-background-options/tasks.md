@@ -102,7 +102,8 @@ Single-project CLI (`codojo`). Source at `src/`, tests at `src/__tests__/`. No s
 ## Phase 6: Polish & Cross-Cutting Concerns
 
 - [X] T009 Run the full suite gate (SC-005): `npm test` all green and `npm run build` strict-clean, confirming no regressions in existing `init`/template tests.
-- [ ] T010 Manual review per quickstart.md (LLM runtime behavior — not unit-testable): dry-run onboarding and check each row against its PASS criterion — sources folded into `profile.md` (≥1 concrete detail per supplied source, none dropped); recap names ≥2 selected sources with no invented claims; ≤3 light follow-ups each answerable in a sentence with an explicit exit offered; `profile.md` confirmed before write. Log results. Runs after T009 (needs the built artifact).
+- [X] T010 Manual review per quickstart.md (LLM runtime behavior — not unit-testable): dry-run onboarding and check each row against its PASS criterion — sources folded into `profile.md` (≥1 concrete detail per supplied source, none dropped); recap names ≥2 selected sources with no invented claims; ≤3 light follow-ups each answerable in a sentence with an explicit exit offered; `profile.md` confirmed before write. Log results. Runs after T009 (needs the built artifact).
+  - **Result (dry-run on built artifact, scaffolded at `/tmp/codojo-t010`)**: PASS on all criteria. Multi-select (GitHub + website + resume) exercised; sources folded into the Background note with ≥1 concrete detail each, none dropped; recap named the selected sources with no invented claims; resume-by-path produced a learner-run `!cp … ./resume.pdf` handoff (mentor performed no shell write — `profile.md` written via Edit/Write); a pasted LinkedIn URL under "something else" was handled as unviewable without ever asking for LinkedIn; follow-ups stayed ≤3 with an explicit exit; `profile.md` shown and confirmed before write.
 
 ---
 
