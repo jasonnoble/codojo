@@ -22,6 +22,37 @@ claude
 it, the mentor walks you through a short onboarding interview — your background,
 the languages you already know, and what you want to learn — then gets to work.
 
+<details>
+<summary>Screenshots of onboarding process</summary>
+
+### Get to know each other
+![Get to know each other](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/onboarding-whats-your-name.png)
+
+### Parse your resume to learn your background
+![Parse your resume to learn your background](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/onboarding-resume.png)
+
+### Look at your Github repos
+![Look at your Github repos](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/onboarding-github.png)
+
+### What do you want to learn or practice?
+![What do you want to learn or practice?](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/onboarding-learning-goals.png)
+
+</details>
+
+<details>
+<summary>Screenshots of mentoring session</summary>
+
+### Where were we?
+![Where were we?](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/session-where-were-we.png)
+
+### What should we work on in this session?
+![What should we work on in this session?](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/session-what-to-cover.png)
+
+### Learn about React components using existing knowledge as a guide
+![Learn about React components using existing knowledge as a guide](https://raw.githubusercontent.com/jasonnoble/codojo/main/readme_screenshots/session-components-and-prompts.png)
+
+</details>
+
 ## How it works
 
 - **Mentor mode, not autocomplete.** The generated `CLAUDE.md` instructs Claude
@@ -88,6 +119,7 @@ run. Network tools are blocked too, with one opt-in exception:
 ## Contributing
 
 codojo is built with [Spec-Driven Development](https://github.com/github/spec-kit).
+
 Note that `.claude/` (the spec-kit slash-command skills) is git-ignored, so after
 cloning you'll need to regenerate it locally with `specify init . --integration
 claude --force`. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full setup,
