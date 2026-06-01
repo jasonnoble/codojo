@@ -213,6 +213,13 @@ appears where appropriate.
   learner who has already completed onboarding; onboarding runs only while the
   profile is marked not-yet-onboarded. Migration of already-onboarded learners is
   out of scope (see Assumptions).
+- **FR-017**: During onboarding the system MUST NOT use write-performing shell
+  commands (`touch`, `>`, `mv`, `rm`, or any other shell write) to modify
+  `profile.md` or any other workspace file; it MUST use its Edit/Write tools for
+  workspace writes and hand any genuinely shell-only write to the learner to run
+  (consistent with Principle VIII and the existing delegate-shell-writes pattern).
+  The OS-level sandbox enforces this; the mentor MUST honor it in spirit where
+  enforcement is soft.
 
 ### Key Entities *(include if feature involves data)*
 
@@ -238,9 +245,12 @@ appears where appropriate.
   its understanding and obtaining the learner's confirmation before continuing.
 - **SC-004**: No learner-facing artifact — the onboarding interview or the profile
   scaffold — contains a LinkedIn reference after the change.
-- **SC-005**: Every behavior defined in this specification is covered by an
-  automated test, and the full test suite passes, before the feature is
-  considered complete.
+- **SC-005**: Every behavior of the shipped artifact (the onboarding-script and
+  profile-scaffold template content) is covered by an automated test that passes,
+  and the strict `tsc` build is clean, before the feature is considered complete.
+  The mentor's runtime adherence to those instructions (fetching/parsing/recapping
+  — FR-006–009, FR-011) is non-deterministic LLM behavior and is verified by the
+  manual review in quickstart.md against its PASS criteria, not by automated test.
 
 ## Assumptions
 

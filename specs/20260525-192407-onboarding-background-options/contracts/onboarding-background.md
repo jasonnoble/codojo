@@ -34,7 +34,7 @@ Learning target → Goals (FR-002, FR-015).
 |---|-------------|-------------|
 | C10 | FR-001 | No request for a LinkedIn profile or URL anywhere in the onboarding script |
 | C11 | FR-008/Edge | No instruction to *fetch* LinkedIn (login-wall); if a learner offers one under "something else", explain it can't be viewed and ask for a paste |
-| C12 | FR-013 (sandbox-isolation) | The mentor MUST NOT use write-performing shell commands (`touch`, `>`, `mv`, `rm`, or any other shell write) to change `profile.md` or any other workspace file during onboarding; it MUST use its Edit/Write tools instead, and hand any genuinely shell-only write to the learner to run. The OS-level sandbox (`denyWrite: ["."]`) enforces this, but the mentor MUST honor it in spirit even where enforcement is soft. |
+| C12 | FR-017 (sandbox-isolation) | The mentor MUST NOT use write-performing shell commands (`touch`, `>`, `mv`, `rm`, or any other shell write) to change `profile.md` or any other workspace file during onboarding; it MUST use its Edit/Write tools instead, and hand any genuinely shell-only write to the learner to run. The OS-level sandbox (`denyWrite: ["."]`) enforces this, but the mentor MUST honor it in spirit even where enforcement is soft. |
 
 ## Profile scaffold — `profileMd()`
 
