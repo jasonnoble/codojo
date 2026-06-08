@@ -13,7 +13,7 @@ workspace whose `CLAUDE.md` turns Claude into your personal mentor.
 ## Quickstart
 
 ```bash
-npx codojo init
+npx codojo@latest init
 cd ~/workspace/codojo   # or wherever you chose
 claude
 ```
@@ -21,6 +21,9 @@ claude
 `codojo init` only scaffolds the workspace. The first time you run `claude` in
 it, the mentor walks you through a short onboarding interview — your background,
 the languages you already know, and what you want to learn — then gets to work.
+
+If you use the GitHub CLI, `codojo init --allow-gh-cli` opts into a read-only set
+of `gh` lookups — see [Permission model](#permission-model).
 
 <details>
 <summary>Screenshots of onboarding process</summary>
